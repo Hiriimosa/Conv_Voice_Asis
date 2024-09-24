@@ -22,7 +22,7 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow,QSpacerItem,
 # Загрузка UI файла
 Ui_Form, _ = uic.loadUiType('VoiceConvAsis_U_3I.ui')
 temp_vol = -1
-openai.api_key = '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'
+openai.api_key = ('')
 
 
 

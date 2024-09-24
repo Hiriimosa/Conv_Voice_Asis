@@ -21,7 +21,7 @@ if 'поиск' in output or 'поиске' in output:
 
 import openai
 
-openai.api_key = 'sk-1234567890abcdef1234567890abcdef12345678n'
+openai.api_key = ''
 
 def generate_response(prompt):
     response = openai.Completion.create(
@@ -72,7 +72,7 @@ if __name__ == '__main__':
 import openai
 
 # Задайте API ключ через переменные окружения или другой безопасный метод
-openai.api_key = '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'  # Замените на ваш настоящий API ключ
+openai.api_key = ''  # Замените на ваш настоящий API ключ
 
 
 class ChatMemory:
