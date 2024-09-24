@@ -1,0 +1,10 @@
+/.venv/
+/.idea/
+/silero_models/
+/vosk-model-small-ru/
+/заметки/
+/data_command.txt/
+/test.py/
+/example.py/
+/data_command_func.py/
+/old_files/
