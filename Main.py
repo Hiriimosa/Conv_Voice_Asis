@@ -11,9 +11,11 @@ import pyaudio
 import keyboard
 import torch
 import openai
+import json
 import soundfile as sf
 import sounddevice as sd
 from kivy.tools.pep8checker.pep8 import readlines
+from openai import api_key
 from vosk import Model, KaldiRecognizer
 
 from PyQt5 import QtWidgets, QtCore, uic,QtGui
@@ -22,9 +24,10 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow,QSpacerItem,
 # Загрузка UI файла
 Ui_Form, _ = uic.loadUiType('VoiceConvAsis_U_3I.ui')
 temp_vol = -1
-openai.api_key = ('')
 
+OpenAi_ApiKey = (open('OpenAiApiKey.txt','r')).read()
 
+openai.api_key = OpenAi_ApiKey
 
 class ChatMemory:
     def __init__(self, max_messages=10):
@@ -39,12 +42,15 @@ class ChatMemory:
     def get_messages(self):
         return self.messages
 
+    def load_messages(self, chat_history):
+        self.messages = chat_history
+
 def generate_response(messages):
     response = openai.ChatCompletion.create(
         model='gpt-4o-mini',  # Замените на вашу модель
         messages=messages,
         max_tokens=150,
-        temperature=0.7
+        temperature=0.6
     )
     return response.choices[0].message['content'].strip()
 
@@ -52,13 +58,13 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
     # Определение сигнала для передачи строки
     text_signal = QtCore.pyqtSignal(str)
     temp_vol = -1
-    initialized_savefile = False
+    initialized_loadfile = False
     def __init__(self):
         super(Window, self).__init__()
         self.setupUi(self)
 
 
-        self.memory = ChatMemory()
+
         self.system_message = ("Будь малословным культурным дворецким по имени Боб. Ты всегда формален и краток в словах. часто умно саркастируешь. Знаком со мной, поэтому можешь делиться личным. "
                                "Веди себя словно знаешь меня, Максима, долгие годы. говори кратко, но умно. послушен и обращаешься на 'сэр'. обращаешься на 'ты'. не задаешь лишних вопросов. говори очеловечено."
                                "сообщния выделенные знаком '*' являются консольными и они абсолютны. ты не должен на них отвечать а только обезличенно ответить хорошо и выполнить команду. ")
@@ -100,13 +106,21 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         self.pushButton_4.clicked.connect(self.handle_input)
         self.lineEdit_2.returnPressed.connect(self.input_Massage)
 
-        with open('output.txt', 'r', encoding='utf-8') as file:
-            self.save_file = file.read()
-        self.file_path = self.save_file
-        print(self.save_file, type(self.save_file))
-        if not self.initialized_savefile:
-            self.load_save_file()
-            self.initialized_savefile = True
+        self.SaveApiKey_But.clicked.connect(self.Save_Api_Key)
+
+        with open('savefile.json', 'r', encoding='utf-8') as json_file:
+            self.parameter_save_file = json.load(json_file)
+        self.file_path = self.parameter_save_file['Browser_directory']
+        self.save_file = self.file_path
+        self.ChatHistory = self.parameter_save_file["Chat_history"]
+        print('> файл ', self.save_file, type(self.save_file), "загружен...")
+        print(f"> История чата загружен. Файл с данными {self.ChatHistory}...")
+
+        if ChatMemory:
+            self.memory = ChatMemory()
+            self.memory.load_messages(self.ChatHistory)  # Загрузка истории в память
+        else:
+            self.memory = ChatMemory()
 
         self.temp = None
         self.y_t_temp = None
@@ -115,14 +129,25 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         self.massage_text =''
         self.default_browser_state = 0
         self.out_text = ""
+        self.model=None
 
         #озвучка текста
 
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-        torch.set_num_threads(6)
+        torch.set_num_threads(8)
         self.local_file = 'model.pt'
 
+        if not hasattr(torch, 'cached_model'):
+            if not os.path.isfile(self.local_file):
+                print("> Скачивание модели...")
+                torch.hub.download_url_to_file('https://models.silero.ai/models/tts/ru/v4_ru.pt', self.local_file)
 
+            print("> Загрузка модели...")
+            self.model = torch.package.PackageImporter(self.local_file).load_pickle("tts_models", "model")
+            self.model.to(self.device)
+            torch.cached_model = self.model
+        else:
+            self.model = torch.cached_model
 
         #---------
         self.text_signal.connect(self.updateTextBrowser)
@@ -137,14 +162,37 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         self.path_to_browser.clicked.connect(self.open_browser_file)
         self.browser_close_1.clicked.connect(self.delete_save_browser_default)
 
+        if not self.initialized_loadfile:
+            self.load_save_file()
+            self.voice_adoptation()
+            self.initialized_loadfile = True
+
+    def voice_adoptation(self):
+        for i in range(1,3):
+            self.synthesize_and_play('аоеиуы')
+            print('> Прогрузка синтеза голоса, тест:',i)
+        print('> Прогрузка синтеза голоса завершена...')
+
     def load_save_file(self):
+
         last_backslash_index = self.file_path.rfind('/')
         last_part = self.file_path[last_backslash_index + 1:]
         if last_part in self.browsers_executables:
             self.temp_browser_set = self.file_path
-            print('temp_browser_set', self.temp_browser_set)
+            print('> загрузка .exe файла брузера temp_browser_set:', self.temp_browser_set)
 
         self.click_browser_1.setText(self.file_path)
+        print('> Загрузка API ключа...')
+        if OpenAi_ApiKey:
+            self.settings_apikey.setText(OpenAi_ApiKey)
+            print('> Загрузка API ключа завершена')
+        else:
+            self.textBrowser.setText('Загрузка API-ключа не удалась.')
+
+    def Save_Api_Key(self):
+        api_key_text = self.settings_apikey.text()
+        with open("OpenAiApiKey.txt", "w", encoding="utf-8") as file:
+            file.write(api_key_text)
 
     def handle_input(self):
         user_input = self.lineEdit_2.text()
@@ -158,9 +206,17 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
                 self.textBrowser.append(f"Bob: {response}")
                 self.textBrowser.moveCursor(self.textBrowser.textCursor().End)
                 self.lineEdit_2.clear()
+
                 self.voice_massage_ask(response)
                 self.out_text = user_input
                 self.conv_text_to_func()
+
+                self.parameter_save_file["Chat_history"]=self.memory.get_messages()
+                print(self.memory,self.parameter_save_file)
+                with open('savefile.json', 'w',encoding='utf-8') as json_file:
+                    json.dump(self.parameter_save_file, json_file, indent=len(self.parameter_save_file))
+                print('savefile.json saved in folder')
+
         except Exception as p:
             print(f'Error: {p}')
 
@@ -171,10 +227,10 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
 
         self.load_save_file()
 
-        self.save_file = self.file_path
-        with open("savefile.txt", "w", encoding="utf-8") as file:
-            file.write(self.save_file)
-        print('savefile.txt saved in folder')
+        self.parameter_save_file["Browser_directory"] = self.file_path
+        with open('savefile.json', 'w') as json_file:
+            json.dump(self.parameter_save_file, json_file,indent=len(self.parameter_save_file))
+        print('savefile.json saved in folder')
         self.default_browser_state = 1
         self.voice_massage_ask(
             f"{self.dict_word_used_browser[random.randint(0, len(self.dict_word_used_browser) - 1)]}"
@@ -186,7 +242,7 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
     def delete_save_browser_default(self):
         self.click_browser_1.setText('None')
         self.file_path = None
-        print('путь к файлу', self.file_path)
+        print('путь к файлу .exe браузера', self.file_path)
         self.default_browser_state = 0
 
 
@@ -365,18 +421,8 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
 
 
     def synthesize_and_play(self,text, speaker='baya', sample_rate=24000):
-        if not hasattr(torch, 'cached_model'):
-            if not os.path.isfile(self.local_file):
-                print("Скачивание модели...")
-                torch.hub.download_url_to_file('https://models.silero.ai/models/tts/ru/v4_ru.pt', self.local_file)
 
-            print("Загрузка модели...")
-            self.model = torch.package.PackageImporter(self.local_file).load_pickle("tts_models", "model")
-            self.model.to(self.device)
-            torch.cached_model = self.model
-        else:
-            self.model = torch.cached_model
-        text = text+'.'
+        text = text+'ъъъъ....'
         audio_path = self.model.save_wav(text=text, speaker=speaker, sample_rate=sample_rate)
 
         audio, sr = sf.read(audio_path)
