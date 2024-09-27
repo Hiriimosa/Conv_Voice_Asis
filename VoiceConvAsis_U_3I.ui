@@ -25,7 +25,7 @@
   <property name="maximumSize">
    <size>
     <width>640</width>
-    <height>484</height>
+    <height>480</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -241,7 +241,7 @@ border-radius: 15px;
                    <property name="verticalSpacing">
                     <number>5</number>
                    </property>
-                   <item row="0" column="0">
+                   <item row="0" column="0" alignment="Qt::AlignHCenter">
                     <widget class="QToolButton" name="toolButton_3">
                      <property name="styleSheet">
                       <string notr="true">background: transparenty;
@@ -356,7 +356,7 @@ border_radius: 5px;</string>
              <item>
               <widget class="QFrame" name="Consol">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -458,7 +458,7 @@ border_radius: 5px;</string>
 padding:5px;
 background-color: rgb(0,0,0);
 color:white;
-padding-left: 15px;
+padding-left: 20px;
 writing-mode: vertical-lr;</string>
                      </property>
                      <property name="lineWidth">
@@ -536,7 +536,7 @@ writing-mode: vertical-lr;</string>
                      </property>
                      <property name="styleSheet">
                       <string notr="true">background-color: rgb(0, 0, 0);
-border-radius: 15px;</string>
+border-radius: 20px;</string>
                      </property>
                      <property name="frameShape">
                       <enum>QFrame::StyledPanel</enum>
@@ -1016,7 +1016,7 @@ background-color: rgb(10,10,10);
                  <number>10</number>
                 </property>
                 <property name="rightMargin">
-                 <number>10</number>
+                 <number>0</number>
                 </property>
                 <property name="bottomMargin">
                  <number>10</number>
@@ -1050,7 +1050,7 @@ border:5px;</string>
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>90</width>
+                     <width>168</width>
                      <height>460</height>
                     </rect>
                    </property>
@@ -1058,7 +1058,10 @@ border:5px;</string>
                     <string notr="true">border-radius: 15px;
 border:1px;</string>
                    </property>
-                   <layout class="QGridLayout" name="gridLayout">
+                   <layout class="QVBoxLayout" name="verticalLayout_5">
+                    <property name="spacing">
+                     <number>10</number>
+                    </property>
                     <property name="leftMargin">
                      <number>0</number>
                     </property>
@@ -1071,10 +1074,7 @@ border:1px;</string>
                     <property name="bottomMargin">
                      <number>10</number>
                     </property>
-                    <property name="spacing">
-                     <number>10</number>
-                    </property>
-                    <item row="0" column="0" alignment="Qt::AlignTop">
+                    <item>
                      <widget class="QFrame" name="frame_5">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -1089,7 +1089,7 @@ border:1px;</string>
                        </size>
                       </property>
                       <property name="styleSheet">
-                       <string notr="true">background-color: rgb(0,0,0);</string>
+                       <string notr="true">background-color: rgb(0,0,0);border-radius:20</string>
                       </property>
                       <property name="frameShape">
                        <enum>QFrame::StyledPanel</enum>
@@ -1172,7 +1172,19 @@ border:1px;</string>
                           </font>
                          </property>
                          <property name="styleSheet">
-                          <string notr="true">background-color: rgb(40,40,40); color: white;</string>
+                          <string notr="true">QPushButton {
+    background: rgb(40, 40, 40);
+    color: white;
+    border-radius: 15px;
+}
+QPushButton:hover {
+    background: rgb(20, 20, 20);
+    color: white;
+    border-radius: 15px;
+}
+QPushButton:pressed {
+    background: rgb(10, 10, 10);
+}</string>
                          </property>
                          <property name="text">
                           <string>Путь к...</string>
@@ -1326,10 +1338,10 @@ border-radius:15px;</string>
                       </layout>
                      </widget>
                     </item>
-                    <item row="1" column="0">
-                     <widget class="QFrame" name="frame_9">
+                    <item alignment="Qt::AlignTop">
+                     <widget class="QFrame" name="settings_apikey_frame">
                       <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                        </sizepolicy>
@@ -1337,12 +1349,12 @@ border-radius:15px;</string>
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
-                        <height>300</height>
+                        <height>55</height>
                        </size>
                       </property>
                       <property name="styleSheet">
-                       <string notr="true">
-background-color: rgb(0,0,0);</string>
+                       <string notr="true">background: black;
+border-radius:20</string>
                       </property>
                       <property name="frameShape">
                        <enum>QFrame::StyledPanel</enum>
@@ -1350,6 +1362,101 @@ background-color: rgb(0,0,0);</string>
                       <property name="frameShadow">
                        <enum>QFrame::Raised</enum>
                       </property>
+                      <layout class="QHBoxLayout" name="horizontalLayout_9">
+                       <property name="spacing">
+                        <number>10</number>
+                       </property>
+                       <property name="leftMargin">
+                        <number>10</number>
+                       </property>
+                       <property name="topMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="rightMargin">
+                        <number>10</number>
+                       </property>
+                       <property name="bottomMargin">
+                        <number>0</number>
+                       </property>
+                       <item>
+                        <widget class="QLineEdit" name="settings_apikey">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>35</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>35</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>System</family>
+                           <pointsize>12</pointsize>
+                           <weight>75</weight>
+                           <bold>true</bold>
+                          </font>
+                         </property>
+                         <property name="styleSheet">
+                          <string notr="true">background: rgb(40,40,40);
+color:white;
+padding:0px 10px 0px 10px;
+border-radius:15px</string>
+                         </property>
+                         <property name="text">
+                          <string/>
+                         </property>
+                         <property name="placeholderText">
+                          <string>Enter the API_KEY</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QPushButton" name="SaveApiKey_But">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>93</width>
+                           <height>35</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>System</family>
+                           <pointsize>12</pointsize>
+                           <weight>75</weight>
+                           <bold>true</bold>
+                          </font>
+                         </property>
+                         <property name="styleSheet">
+                          <string notr="true">QPushButton {
+    background: rgb(40, 40, 40);
+    color: white;
+    border-radius: 15px;
+}
+QPushButton:hover {
+    background: rgb(20, 20, 20);
+    color: white;
+    border-radius: 15px;
+}
+QPushButton:pressed {
+    background: rgb(10, 10, 10);
+}</string>
+                         </property>
+                         <property name="text">
+                          <string>Сохранить</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
                      </widget>
                     </item>
                    </layout>

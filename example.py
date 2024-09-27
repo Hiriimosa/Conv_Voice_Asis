@@ -72,7 +72,6 @@ if __name__ == '__main__':
 import openai
 
 # Задайте API ключ через переменные окружения или другой безопасный метод
-openai.api_key = ''  # Замените на ваш настоящий API ключ
 
 
 class ChatMemory:

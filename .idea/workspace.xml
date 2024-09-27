@@ -4,28 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="89b2c337-d58d-480d-ab3b-9a29d802b98c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="89b2c337-d58d-480d-ab3b-9a29d802b98c" name="Changes" comment="added: saving the chat history until the next chat start">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VoiceConvAsis.7z" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/VoiceConvAsis_UI.ui" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/VoiceConvAsis_U_2I.ui" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrome.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrome.png-autosave.kra" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cross.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/firefox_browser.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/firefox_browser.jpg-autosave.kra" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/firefox_browser.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img_11728.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img_11728_white.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/model.pt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ms-edge-icon.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ms-edge-new.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ms-edge-new.png-autosave.kra" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ms-edge-newa.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vosk-model-small-ru-0.22" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/savefile.json" beforeDir="false" afterPath="$PROJECT_DIR$/savefile.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,18 +26,18 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="ROOT_SYNC" value="DONT_SYNC" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "HaerBit"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;HaerBit&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/HaerBit/Conv_Voice_Asis.git",
-    "accountId": "9820d28d-d080-4b68-a4a3-4cc7eda68777"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/HaerBit/Conv_Voice_Asis.git&quot;,
+    &quot;accountId&quot;: &quot;9820d28d-d080-4b68-a4a3-4cc7eda68777&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
 }</component>
@@ -65,19 +48,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.Main.executor": "Run",
-    "Python.crypto.executor": "Run",
-    "Python.cryptography.executor": "Run",
-    "Python.test.executor": "Run",
-    "Python.еtes.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "D:/Works/VoiceConvAsis",
-    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.crypto.executor&quot;: &quot;Run&quot;,
+    &quot;Python.cryptography.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;Python.еtes.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Works/VoiceConvAsis&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.build&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Python.Main">
     <configuration name="Main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="VoiceConv" />
@@ -215,6 +198,39 @@
       <option name="presentableId" value="Default" />
       <updated>1722640394228</updated>
     </task>
+    <task id="LOCAL-00001" summary="Удаление игнорируемых файлов и папок">
+      <option name="closed" value="true" />
+      <created>1727202768644</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1727202768644</updated>
+    </task>
+    <task id="LOCAL-00002" summary="added: saving the chat history until the next chat start">
+      <option name="closed" value="true" />
+      <created>1727467342019</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1727467342019</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Удаление игнорируемых файлов и папок" />
+    <MESSAGE value="added: saving the chat history until the next chat start" />
+    <option name="LAST_COMMIT_MESSAGE" value="added: saving the chat history until the next chat start" />
   </component>
 </project>
