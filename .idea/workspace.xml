@@ -4,16 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="89b2c337-d58d-480d-ab3b-9a29d802b98c" name="Changes" comment="Update OpenAiApiKey.txt">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OpenAiApiKey.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/VoiceConvAsis_U_3I.ui" beforeDir="false" afterPath="$PROJECT_DIR$/VoiceConvAsis_U_3I.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/params.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/savefile.json" beforeDir="false" afterPath="$PROJECT_DIR$/savefile.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
-    </list>
+    <list default="true" id="89b2c337-d58d-480d-ab3b-9a29d802b98c" name="Changes" comment="Added:&#10;-&quot;Number_of_tokens&quot;,&quot;Temperature&quot; save and settings blocks" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -244,7 +235,15 @@
       <option name="project" value="LOCAL" />
       <updated>1727983083254</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Added:&#10;-&quot;Number_of_tokens&quot;,&quot;Temperature&quot; save and settings blocks">
+      <option name="closed" value="true" />
+      <created>1727988247882</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1727988247882</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -290,6 +289,7 @@
     <MESSAGE value="added: saving the chat history until the next chat start" />
     <MESSAGE value="update folder" />
     <MESSAGE value="Update OpenAiApiKey.txt" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update OpenAiApiKey.txt" />
+    <MESSAGE value="Added:&#10;-&quot;Number_of_tokens&quot;,&quot;Temperature&quot; save and settings blocks" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added:&#10;-&quot;Number_of_tokens&quot;,&quot;Temperature&quot; save and settings blocks" />
   </component>
 </project>
