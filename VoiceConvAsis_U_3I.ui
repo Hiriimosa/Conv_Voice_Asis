@@ -235,10 +235,7 @@ border-radius: 15px;
                    <property name="bottomMargin">
                     <number>0</number>
                    </property>
-                   <property name="horizontalSpacing">
-                    <number>4</number>
-                   </property>
-                   <property name="verticalSpacing">
+                   <property name="spacing">
                     <number>5</number>
                    </property>
                    <item row="0" column="0" alignment="Qt::AlignHCenter">
@@ -252,7 +249,7 @@ border_radius: 5px;</string>
                      </property>
                      <property name="icon">
                       <iconset>
-                       <normaloff>C:/Users/tegip/.designer/backup/menu_1.png</normaloff>C:/Users/tegip/.designer/backup/menu_1.png</iconset>
+                       <normaloff>menu_1.png</normaloff>menu_1.png</iconset>
                      </property>
                      <property name="iconSize">
                       <size>
@@ -269,7 +266,7 @@ border_radius: 5px;</string>
                      </property>
                      <property name="icon">
                       <iconset>
-                       <normaloff>C:/Users/tegip/.designer/backup/options.png</normaloff>C:/Users/tegip/.designer/backup/options.png</iconset>
+                       <normaloff>options.png</normaloff>options.png</iconset>
                      </property>
                      <property name="iconSize">
                       <size>
@@ -363,7 +360,7 @@ border_radius: 5px;</string>
                </property>
                <property name="minimumSize">
                 <size>
-                 <width>0</width>
+                 <width>585</width>
                  <height>480</height>
                 </size>
                </property>
@@ -957,7 +954,7 @@ background-color: rgb(10,10,10);
 }</string>
                         </property>
                         <property name="text">
-                         <string>ВВОД</string>
+                         <string>Enter</string>
                         </property>
                        </widget>
                       </item>
@@ -980,7 +977,7 @@ background-color: rgb(10,10,10);
                </property>
                <property name="minimumSize">
                 <size>
-                 <width>585</width>
+                 <width>0</width>
                  <height>0</height>
                 </size>
                </property>
@@ -1045,12 +1042,15 @@ border:5px;</string>
                   <property name="widgetResizable">
                    <bool>true</bool>
                   </property>
+                  <property name="alignment">
+                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                  </property>
                   <widget class="QWidget" name="scrollAreaWidgetContents_7">
                    <property name="geometry">
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>585</width>
+                     <width>515</width>
                      <height>460</height>
                     </rect>
                    </property>
@@ -1349,7 +1349,13 @@ border-radius:15px;</string>
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
-                        <height>55</height>
+                        <height>100</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>575</width>
+                        <height>16777215</height>
                        </size>
                       </property>
                       <property name="styleSheet">
@@ -1362,23 +1368,131 @@ border-radius:20</string>
                       <property name="frameShadow">
                        <enum>QFrame::Raised</enum>
                       </property>
-                      <layout class="QHBoxLayout" name="horizontalLayout_9">
-                       <property name="spacing">
-                        <number>10</number>
-                       </property>
+                      <layout class="QGridLayout" name="gridLayout_4">
                        <property name="leftMargin">
                         <number>10</number>
                        </property>
                        <property name="topMargin">
-                        <number>0</number>
+                        <number>11</number>
                        </property>
                        <property name="rightMargin">
                         <number>10</number>
                        </property>
                        <property name="bottomMargin">
-                        <number>0</number>
+                        <number>10</number>
                        </property>
-                       <item>
+                       <property name="spacing">
+                        <number>10</number>
+                       </property>
+                       <item row="1" column="1">
+                        <widget class="QLineEdit" name="Temperature_LineE">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>203</width>
+                           <height>35</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>System</family>
+                           <pointsize>12</pointsize>
+                           <weight>75</weight>
+                           <bold>true</bold>
+                          </font>
+                         </property>
+                         <property name="styleSheet">
+                          <string notr="true">background: rgb(40,40,40);
+color:white;
+padding:0px 10px 0px 10px;
+border-radius:15px</string>
+                         </property>
+                         <property name="placeholderText">
+                          <string>Temperature</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="1" column="0">
+                        <widget class="QLineEdit" name="Num_tokens_LineE">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>202</width>
+                           <height>35</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>System</family>
+                           <pointsize>12</pointsize>
+                           <weight>75</weight>
+                           <bold>true</bold>
+                          </font>
+                         </property>
+                         <property name="styleSheet">
+                          <string notr="true">background: rgb(40,40,40);
+color:white;
+padding:0px 10px 0px 10px;
+border-radius:15px</string>
+                         </property>
+                         <property name="placeholderText">
+                          <string>Number of tokens</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="1" column="2">
+                        <widget class="QPushButton" name="SaveApiSet_But">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>60</width>
+                           <height>35</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>System</family>
+                           <pointsize>12</pointsize>
+                           <weight>75</weight>
+                           <bold>true</bold>
+                          </font>
+                         </property>
+                         <property name="styleSheet">
+                          <string notr="true">QPushButton {
+    background: rgb(40, 40, 40);
+    color: white;
+    border-radius: 15px;
+}
+QPushButton:hover {
+    background: rgb(20, 20, 20);
+    color: white;
+    border-radius: 15px;
+}
+QPushButton:pressed {
+    background: rgb(10, 10, 10);
+}</string>
+                         </property>
+                         <property name="text">
+                          <string>Сохранить</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="0" colspan="3">
                         <widget class="QLineEdit" name="settings_apikey">
                          <property name="sizePolicy">
                           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -1411,238 +1525,6 @@ border-radius:15px</string>
                          </property>
                          <property name="placeholderText">
                           <string>Enter the API_KEY</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QPushButton" name="SaveApiKey_But">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>95</width>
-                           <height>35</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>System</family>
-                           <pointsize>12</pointsize>
-                           <weight>75</weight>
-                           <bold>true</bold>
-                          </font>
-                         </property>
-                         <property name="styleSheet">
-                          <string notr="true">QPushButton {
-    background: rgb(40, 40, 40);
-    color: white;
-    border-radius: 15px;
-}
-QPushButton:hover {
-    background: rgb(20, 20, 20);
-    color: white;
-    border-radius: 15px;
-}
-QPushButton:pressed {
-    background: rgb(10, 10, 10);
-}</string>
-                         </property>
-                         <property name="text">
-                          <string>Сохранить</string>
-                         </property>
-                        </widget>
-                       </item>
-                      </layout>
-                     </widget>
-                    </item>
-                    <item alignment="Qt::AlignTop">
-                     <widget class="QFrame" name="frame_9">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="minimumSize">
-                       <size>
-                        <width>0</width>
-                        <height>55</height>
-                       </size>
-                      </property>
-                      <property name="styleSheet">
-                       <string notr="true">background: black;
-border-radius:20</string>
-                      </property>
-                      <property name="frameShape">
-                       <enum>QFrame::StyledPanel</enum>
-                      </property>
-                      <property name="frameShadow">
-                       <enum>QFrame::Plain</enum>
-                      </property>
-                      <property name="lineWidth">
-                       <number>0</number>
-                      </property>
-                      <layout class="QGridLayout" name="gridLayout">
-                       <property name="leftMargin">
-                        <number>10</number>
-                       </property>
-                       <property name="topMargin">
-                        <number>10</number>
-                       </property>
-                       <property name="rightMargin">
-                        <number>10</number>
-                       </property>
-                       <property name="bottomMargin">
-                        <number>10</number>
-                       </property>
-                       <property name="spacing">
-                        <number>10</number>
-                       </property>
-                       <item row="0" column="1">
-                        <widget class="QPushButton" name="Num_tokens_Button">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>60</width>
-                           <height>35</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>System</family>
-                           <pointsize>12</pointsize>
-                           <weight>75</weight>
-                           <bold>true</bold>
-                          </font>
-                         </property>
-                         <property name="styleSheet">
-                          <string notr="true">QPushButton {
-    background: rgb(40, 40, 40);
-    color: white;
-    border-radius: 15px;
-}
-QPushButton:hover {
-    background: rgb(20, 20, 20);
-    color: white;
-    border-radius: 15px;
-}
-QPushButton:pressed {
-    background: rgb(10, 10, 10);
-}</string>
-                         </property>
-                         <property name="text">
-                          <string>Enter</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="2">
-                        <widget class="QLineEdit" name="Temperature_LineE">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>202</width>
-                           <height>35</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>System</family>
-                           <pointsize>12</pointsize>
-                           <weight>75</weight>
-                           <bold>true</bold>
-                          </font>
-                         </property>
-                         <property name="styleSheet">
-                          <string notr="true">background: rgb(40,40,40);
-color:white;
-padding:0px 10px 0px 10px;
-border-radius:15px</string>
-                         </property>
-                         <property name="placeholderText">
-                          <string>Temperature</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="3">
-                        <widget class="QPushButton" name="Temperature_Button">
-                         <property name="minimumSize">
-                          <size>
-                           <width>60</width>
-                           <height>35</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>System</family>
-                           <pointsize>12</pointsize>
-                           <weight>75</weight>
-                           <bold>true</bold>
-                          </font>
-                         </property>
-                         <property name="styleSheet">
-                          <string notr="true">QPushButton {
-    background: rgb(40, 40, 40);
-    color: white;
-    border-radius: 15px;
-}
-QPushButton:hover {
-    background: rgb(20, 20, 20);
-    color: white;
-    border-radius: 15px;
-}
-QPushButton:pressed {
-    background: rgb(10, 10, 10);
-}</string>
-                         </property>
-                         <property name="text">
-                          <string>Enter</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="0">
-                        <widget class="QLineEdit" name="Num_tokens_LineE">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>202</width>
-                           <height>35</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>System</family>
-                           <pointsize>12</pointsize>
-                           <weight>75</weight>
-                           <bold>true</bold>
-                          </font>
-                         </property>
-                         <property name="styleSheet">
-                          <string notr="true">background: rgb(40,40,40);
-color:white;
-padding:0px 10px 0px 10px;
-border-radius:15px</string>
-                         </property>
-                         <property name="placeholderText">
-                          <string>Number of tokens</string>
                          </property>
                         </widget>
                        </item>

@@ -14,6 +14,7 @@ import openai
 import json
 import soundfile as sf
 import sounddevice as sd
+from docutils.parsers.rst.directives import encoding
 from kivy.tools.pep8checker.pep8 import readlines
 from openai import api_key
 from vosk import Model, KaldiRecognizer
@@ -25,9 +26,18 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow,QSpacerItem,
 Ui_Form, _ = uic.loadUiType('VoiceConvAsis_U_3I.ui')
 temp_vol = -1
 
-OpenAi_ApiKey = (open('OpenAiApiKey.txt','r')).read()
+file_name = 'OpenAiApiKey.txt'
+if not os.path.exists(file_name):
+    open(file_name, 'w',encoding='utf-8').close()
+with open(file_name, 'r',encoding='utf-8') as file:
+    OpenAi_ApiKey = file.read()
 
 openai.api_key = OpenAi_ApiKey
+
+with open('savefile.json', 'r', encoding='utf-8') as json_file:
+    parameter_save_file = json.load(json_file)
+Number_of_tokens = parameter_save_file['Number_of_tokens']
+Temperature = parameter_save_file['Temperature']
 
 class ChatMemory:
     def __init__(self, max_messages=15):
@@ -49,8 +59,8 @@ def generate_response(messages):
     response = openai.ChatCompletion.create(
         model='gpt-4o-mini',  # Замените на вашу модель
         messages=messages,
-        max_tokens=150,
-        temperature=0.8
+        max_tokens=Number_of_tokens,
+        temperature=Temperature
     )
     return response.choices[0].message['content'].strip()
 
@@ -106,20 +116,19 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         self.pushButton_2.toggled.connect(self.startVoiceRecognition)
         self.pushButton_2.setIconSize(QtCore.QSize(24, 24))
 
-        self.icon_normal = QtGui.QIcon('img_11728.png')
-        self.icon_active = QtGui.QIcon('img_11728_white.png')
+        self.icon_normal = QtGui.QIcon('icon/img_11728.png')
+        self.icon_active = QtGui.QIcon('icon/img_11728_white.png')
         self.pushButton_2.setIcon(self.icon_normal)
 
         self.pushButton_4.clicked.connect(self.handle_input)
         self.lineEdit_2.returnPressed.connect(self.input_Massage)
 
-        self.SaveApiKey_But.clicked.connect(self.Save_Api_Key)
+        self.SaveApiSet_But.clicked.connect(self.Save_Api_settings)
 
-        with open('savefile.json', 'r', encoding='utf-8') as json_file:
-            self.parameter_save_file = json.load(json_file)
-        self.file_path = self.parameter_save_file['Browser_directory']
+
+        self.file_path = parameter_save_file['Browser_directory']
         self.save_file = self.file_path
-        self.ChatHistory = self.parameter_save_file["Chat_history"]
+        self.ChatHistory = parameter_save_file["Chat_history"]
         print('> файл ', self.save_file, type(self.save_file), "загружен...")
         print(f"> История чата загружен. Файл с данными {self.ChatHistory}...")
 
@@ -183,26 +192,25 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
 
     def timer_interval_set(self):
         self.interval = random.randint(60000, 120000)
-        print(self.interval)
+        print(self.interval//1000,'сек.')
 
     def execute_command(self):
         print("случайный вопрос!")
 
         user_input = ("*задай любой краткий человеческий вопрос или скажи что-нибуль связанный с историей чата, как мой друг и не повторяйся"
-                      "и если я не отвечал тебе то справшивай почему я молчу*")
+                      "и если я не отвеnил тебе то справшивай почему я молчу*")
         self.memory.add_message("user", user_input)
         messages_with_system = [{"role": "system", "content": self.system_message}] + self.memory.get_messages()
         response = generate_response(messages_with_system)
         self.memory.add_message("assistant", response)
-        self.textBrowser.append(f"User: {user_input}")
-        self.textBrowser.append(f"Bob: {response}")
+        """self.textBrowser.append(f"Bob: {response}")"""
         self.textBrowser.moveCursor(self.textBrowser.textCursor().End)
         self.voice_massage_ask(response)
 
-        self.parameter_save_file["Chat_history"] = self.memory.get_messages()
-        print(self.memory, self.parameter_save_file)
+        parameter_save_file["Chat_history"] = self.memory.get_messages()
+        print(self.memory, parameter_save_file)
         with open('savefile.json', 'w', encoding='utf-8') as json_file:
-            json.dump(self.parameter_save_file, json_file, indent=len(self.parameter_save_file))
+            json.dump(parameter_save_file, json_file, indent=len(parameter_save_file))
         print('savefile.json saved in folder')
 
         self.timer_interval_set()
@@ -222,6 +230,10 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
             self.temp_browser_set = self.file_path
             print('> загрузка .exe файла брузера temp_browser_set:', self.temp_browser_set)
 
+        self.Num_tokens_LineE.setText(str(Number_of_tokens))
+        self.Temperature_LineE.setText(str(Temperature))
+
+        self.voice_adoptation()
         self.click_browser_1.setText(self.file_path)
         print('> Загрузка API ключа...')
         if OpenAi_ApiKey:
@@ -229,9 +241,17 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
             print('> Загрузка API ключа завершена')
         else:
             self.textBrowser.setText('Загрузка API-ключа не удалась.')
+        print('')
 
-    def Save_Api_Key(self):
+    def Save_Api_settings(self):
         api_key_text = self.settings_apikey.text()
+        parameter_save_file['Number_of_tokens']=int(self.Num_tokens_LineE.text())
+        parameter_save_file['Temperature'] = float(self.Temperature_LineE.text())
+
+        with open('savefile.json', 'w', encoding='utf-8') as json_file:
+            json.dump(parameter_save_file, json_file, indent=len(parameter_save_file))
+        print('savefile.json saved in folder')
+
         with open("OpenAiApiKey.txt", "w", encoding="utf-8") as file:
             file.write(api_key_text)
 
@@ -252,12 +272,13 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
                 self.out_text = user_input
                 self.conv_text_to_func()
 
-                self.parameter_save_file["Chat_history"]=self.memory.get_messages()
-                print(self.memory,self.parameter_save_file)
+                parameter_save_file["Chat_history"]=self.memory.get_messages()
+                print(self.memory,parameter_save_file)
                 with open('savefile.json', 'w',encoding='utf-8') as json_file:
-                    json.dump(self.parameter_save_file, json_file, indent=len(self.parameter_save_file))
+                    json.dump(parameter_save_file, json_file, indent=len(parameter_save_file))
                 print('savefile.json saved in folder')
             self.timer_interval_set()
+            self.timer.start(self.interval)
 
 
         except Exception as p:
@@ -270,9 +291,9 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
 
         self.load_save_file()
 
-        self.parameter_save_file["Browser_directory"] = self.file_path
-        with open('savefile.json', 'w') as json_file:
-            json.dump(self.parameter_save_file, json_file,indent=len(self.parameter_save_file))
+        parameter_save_file["Browser_directory"] = self.file_path
+        with open('savefile.json', 'w',encoding='utf-8') as json_file:
+            json.dump(parameter_save_file, json_file,indent=len(parameter_save_file))
         print('savefile.json saved in folder')
         self.default_browser_state = 1
         self.voice_massage_ask(
