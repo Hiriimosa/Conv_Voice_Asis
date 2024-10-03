@@ -182,7 +182,7 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         self.timer.start(self.interval)
 
     def timer_interval_set(self):
-        self.interval = random.randint(30000, 50000)
+        self.interval = random.randint(60000, 120000)
         print(self.interval)
 
     def execute_command(self):
