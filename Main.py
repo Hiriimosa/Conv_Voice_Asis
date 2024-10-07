@@ -38,6 +38,8 @@ with open('savefile.json', 'r', encoding='utf-8') as json_file:
     parameter_save_file = json.load(json_file)
 Number_of_tokens = parameter_save_file['Number_of_tokens']
 Temperature = parameter_save_file['Temperature']
+Min_STime_Question = parameter_save_file['Question_Interval_min']
+Max_STime_Question = parameter_save_file['Question_Interval_max']
 
 class ChatMemory:
     def __init__(self, max_messages=15):
@@ -74,17 +76,17 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         self.setupUi(self)
 
         self.system_message = (
-            "Будь культурным компьютерным аватаром дворецким, Бобом.\n"
-            "Ты всегда формален и краток, с ноткой сарказма.\n"
+            "Будь культурным аватаром дворецким, Бобом.\n"
+            "Ты всегда формален и иногда дурачишься, с ноткой сарказма.\n"
             "Знаком с тобой давно, так что можешь делиться личным.\n"
             "Веди себя так, словно знаешь меня много лет.\n"
-            "Говори кратко, но умно.\n"
-            "Ты послушен и иногда обращаешься на 'сэр' или Максим.\n"
+            "Говори умно.\n"
+            "Ты послушен и иногда обращаешься на 'сэр' или Максим. Знаешь Радомира.\n"
             "Говоришь на 'ты', задаешь вопросы.\n"
             "Будь остроумным, наблюдательным и уверенным.\n"
-            "сообщния выделенные знаком '*' являются консольными и они абсолютны для команды.\n"
+            "сообщния выделенные знаком '*' являются консольными и они абсолютны для твоего выполнения команды.\n"
             "ты не должен отвечать на слова выделенные '*' а только обезличенно выполнить запрос или выполнить команду."
-            "не повторяйся")
+            "не повторяйся!")
 
         self.dict_word_used_browser=[    "Вы выбрали браузер",
                                          "Вы определились с браузером",
@@ -124,13 +126,13 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         self.lineEdit_2.returnPressed.connect(self.input_Massage)
 
         self.SaveApiSet_But.clicked.connect(self.Save_Api_settings)
-
+        self.Question_Interval_saveButton.clicked.connect(self.Save_Ttaaq)
 
         self.file_path = parameter_save_file['Browser_directory']
         self.save_file = self.file_path
         self.ChatHistory = parameter_save_file["Chat_history"]
         print('> файл ', self.save_file, type(self.save_file), "загружен...")
-        print(f"> История чата загружен. Файл с данными {self.ChatHistory}...")
+        print(f"> История чата загружена. Файл с данными {self.ChatHistory}...")
 
         if ChatMemory:
             self.memory = ChatMemory()
@@ -191,14 +193,14 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         self.timer.start(self.interval)
 
     def timer_interval_set(self):
-        self.interval = random.randint(60000, 120000)
-        print(self.interval//1000,'сек.')
+        self.interval = random.randint(Min_STime_Question*1000, Max_STime_Question*1000)
+        print(self.interval//1000,'сек. осталось до вопроса')
 
     def execute_command(self):
         print("случайный вопрос!")
 
-        user_input = ("*задай любой краткий человеческий вопрос или скажи что-нибуль связанный с историей чата, как мой друг и не повторяйся"
-                      "и если я не отвеnил тебе то справшивай почему я молчу*")
+        user_input = ("*задай любой краткий глупый вопрос или скажи что-нибуль связанный с историей чата и его темой, как мой друг, обязательно не повторяйся."
+                      "и если я не отвеnил на твои вопросы до этого, то справшивай почему я молчу*")
         self.memory.add_message("user", user_input)
         messages_with_system = [{"role": "system", "content": self.system_message}] + self.memory.get_messages()
         response = generate_response(messages_with_system)
@@ -208,18 +210,17 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         self.voice_massage_ask(response)
 
         parameter_save_file["Chat_history"] = self.memory.get_messages()
+
         print(self.memory, parameter_save_file)
-        with open('savefile.json', 'w', encoding='utf-8') as json_file:
-            json.dump(parameter_save_file, json_file, indent=len(parameter_save_file))
-        print('savefile.json saved in folder')
+        self.save_savefile()
 
         self.timer_interval_set()
         self.timer.start(self.interval)
 
     def voice_adoptation(self):
-        for i in range(1,3):
-            self.synthesize_and_play('аоеиуы')
-            print('> Прогрузка синтеза голоса, тест:',i)
+        self.synthesize_and_play('о')
+        print('> Прогрузка синтеза голоса, тест:', 1)
+        self.synthesize_and_play('завершён...')
         print('> Прогрузка синтеза голоса завершена...')
 
     def load_save_file(self):
@@ -230,8 +231,13 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
             self.temp_browser_set = self.file_path
             print('> загрузка .exe файла брузера temp_browser_set:', self.temp_browser_set)
 
+        # set info API tokens and temperature
         self.Num_tokens_LineE.setText(str(Number_of_tokens))
         self.Temperature_LineE.setText(str(Temperature))
+
+        # set info min/max question interval
+        self.Question_Interval_min_LE.setText(str(Min_STime_Question))
+        self.Question_Interval_max_LE.setText(str(Max_STime_Question))
 
         self.voice_adoptation()
         self.click_browser_1.setText(self.file_path)
@@ -241,7 +247,15 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
             print('> Загрузка API ключа завершена')
         else:
             self.textBrowser.setText('Загрузка API-ключа не удалась.')
-        print('')
+
+    def Save_Ttaaq(self): # save Timer
+        global Min_STime_Question,Max_STime_Question
+        parameter_save_file['Question_Interval_min'] = int(self.Question_Interval_min_LE.text())
+        parameter_save_file['Question_Interval_max'] = int(self.Question_Interval_max_LE.text())
+        Min_STime_Question = int(self.Question_Interval_min_LE.text())
+        Max_STime_Question = int(self.Question_Interval_max_LE.text())
+        self.save_savefile()
+        self.timer_interval_set()
 
     def Save_Api_settings(self):
         api_key_text = self.settings_apikey.text()
@@ -254,6 +268,12 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
 
         with open("OpenAiApiKey.txt", "w", encoding="utf-8") as file:
             file.write(api_key_text)
+
+    def Set_Default_Settings(self):
+        self.Num_tokens_LineE.setText(str(parameter_save_file['Number_of_tokens']))
+        self.Temperature_LineE.setText(str(parameter_save_file['Temperature']))
+        self.Question_Interval_min_LE.setText(str(parameter_save_file['Question_Interval_min']))
+        self.Question_Interval_max_LE.setText(str(parameter_save_file['Question_Interval_max']))
 
     def handle_input(self):
         user_input = self.lineEdit_2.text()
@@ -274,9 +294,7 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
 
                 parameter_save_file["Chat_history"]=self.memory.get_messages()
                 print(self.memory,parameter_save_file)
-                with open('savefile.json', 'w',encoding='utf-8') as json_file:
-                    json.dump(parameter_save_file, json_file, indent=len(parameter_save_file))
-                print('savefile.json saved in folder')
+                self.save_savefile()
             self.timer_interval_set()
             self.timer.start(self.interval)
 
@@ -292,16 +310,17 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         self.load_save_file()
 
         parameter_save_file["Browser_directory"] = self.file_path
-        with open('savefile.json', 'w',encoding='utf-8') as json_file:
-            json.dump(parameter_save_file, json_file,indent=len(parameter_save_file))
-        print('savefile.json saved in folder')
+        self.save_savefile()
         self.default_browser_state = 1
         self.voice_massage_ask(
             f"{self.dict_word_used_browser[random.randint(0, len(self.dict_word_used_browser) - 1)]}"
             f" {self.file_path}"
         )
 
-
+    def save_savefile(self):
+        with open('savefile.json', 'w',encoding='utf-8') as json_file:
+            json.dump(parameter_save_file, json_file,indent=len(parameter_save_file))
+        print('savefile.json saved in folder')
 
     def delete_save_browser_default(self):
         self.click_browser_1.setText('None')
@@ -351,6 +370,8 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         index = random.randint(0, len(synonyms) - 1)
         self.voice_massage_ask(get_random_message())
 
+
+
     def Slide_Frame_Options(self):
         if self.animation_block:
             return
@@ -390,7 +411,7 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
                 self.animation4.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
                 self.animation4.finished.connect(self.on_animation_finished)
                 self.animation4.start()
-
+            self.Set_Default_Settings()
         else:
             self.Side_Menu_Num = 0
             if self.Side_Menu_Num_2 == 0:
@@ -425,6 +446,7 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
                 self.animation4.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
                 self.animation4.finished.connect(self.on_animation_finished)
                 self.animation4.start()
+
 
     def Slide_Frame_Main(self):
         if self.animation_block:
@@ -512,7 +534,7 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
 
     def synthesize_and_play(self,text, speaker='baya', sample_rate=24000):
 
-        text = text+'ъъъъ....'
+        text = text+'....ъъъъ'
         audio_path = self.model.save_wav(text=text, speaker=speaker, sample_rate=sample_rate)
 
         audio, sr = sf.read(audio_path)
