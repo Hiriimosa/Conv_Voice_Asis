@@ -1,4 +1,3 @@
-import json
 import os
 import random
 import re
@@ -14,14 +13,9 @@ import openai
 import json
 import soundfile as sf
 import sounddevice as sd
-from docutils.parsers.rst.directives import encoding
-from kivy.tools.pep8checker.pep8 import readlines
-from openai import api_key
 from vosk import Model, KaldiRecognizer
-
 from PyQt5 import QtWidgets, QtCore, uic,QtGui
-from PyQt5.QtWidgets import (QApplication, QMainWindow,QSpacerItem,
-                             QFileDialog,QPushButton,QVBoxLayout,QWidget,QSizePolicy)
+from PyQt5.QtWidgets import (QFileDialog)
 # Загрузка UI файла
 Ui_Form, _ = uic.loadUiType('VoiceConvAsis_U_3I.ui')
 temp_vol = -1
@@ -120,7 +114,11 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
 
         self.icon_normal = QtGui.QIcon('icon/img_11728.png')
         self.icon_active = QtGui.QIcon('icon/img_11728_white.png')
+        self.icon_voice_normal = QtGui.QIcon('icon/sound_asis_on.png')
+        self.icon_voice_active = QtGui.QIcon('icon/sound_asis_off.png')
+
         self.pushButton_2.setIcon(self.icon_normal)
+        self.deactivate_voice.setIcon(self.icon_voice_normal)
 
         self.pushButton_4.clicked.connect(self.handle_input)
         self.lineEdit_2.returnPressed.connect(self.input_Massage)
@@ -172,8 +170,16 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
 
         self.button_options.clicked.connect(lambda : self.Slide_Frame_Options())
         self.toolButton_3.clicked.connect(lambda: self.Slide_Frame_Main())
+        self.Personality_Sett_TE_Button.clicked.connect(lambda : self.Anim_Slide_Frame_Pers_TE())
+        self.History_Sett_TE_Button.clicked.connect(lambda : self.Anim_Slide_Frame_History_TE())
+        self.Manner_Sett_TE_Button.clicked.connect(lambda: self.Anim_Slide_Frame_Manner_TE())
+
         self.Side_Menu_Num = 0
         self.Side_Menu_Num_2 = 0
+        self.ASF_Pers_TE = 0
+        self.ASF_History_TE = 0
+        self.ASF_Manner_TE = 0
+
         self.frame_6_max_width = 585
         self.frame_6_main_width = 525
         self.animation_block = 0
@@ -205,7 +211,7 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         messages_with_system = [{"role": "system", "content": self.system_message}] + self.memory.get_messages()
         response = generate_response(messages_with_system)
         self.memory.add_message("assistant", response)
-        """self.textBrowser.append(f"Bob: {response}")"""
+        self.textBrowser.append(f"Bob: {response}")
         self.textBrowser.moveCursor(self.textBrowser.textCursor().End)
         self.voice_massage_ask(response)
 
@@ -223,7 +229,7 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         self.synthesize_and_play('завершён...')
         print('> Прогрузка синтеза голоса завершена...')
 
-    def load_save_file(self):
+    def load_save_file(self): # Initialization
 
         last_backslash_index = self.file_path.rfind('/')
         last_part = self.file_path[last_backslash_index + 1:]
@@ -239,7 +245,7 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         self.Question_Interval_min_LE.setText(str(Min_STime_Question))
         self.Question_Interval_max_LE.setText(str(Max_STime_Question))
 
-        self.voice_adoptation()
+        """self.voice_adoptation()"""
         self.click_browser_1.setText(self.file_path)
         print('> Загрузка API ключа...')
         if OpenAi_ApiKey:
@@ -370,7 +376,81 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         index = random.randint(0, len(synonyms) - 1)
         self.voice_massage_ask(get_random_message())
 
+    def Anim_Slide_Frame_Manner_TE(self):
+        if self.animation_block:
+            return
+        self.animation_block = True
+        if self.ASF_Manner_TE == 0: #открытие окна
+            self.ASF_Manner_TE = 1
+            self.Manner_Sett_TE_Button.setText(" < ")
+            self.animation10 = QtCore.QPropertyAnimation(self.Manner_Sett_TE, b"minimumHeight")
+            self.animation10.setDuration(self.duration_anim_sideMenu)
+            self.animation10.setStartValue(0)
+            self.animation10.setEndValue(170)
+            self.animation10.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
+            self.animation10.finished.connect(self.on_animation_finished)
+            self.animation10.start()
+        else:                     #закрытие окна
+            self.ASF_Manner_TE = 0
+            self.Manner_Sett_TE_Button.setText(". . .")
+            self.animation10 = QtCore.QPropertyAnimation(self.Manner_Sett_TE, b"minimumHeight")
+            self.animation10.setDuration(self.duration_anim_sideMenu)
+            self.animation10.setStartValue(170)
+            self.animation10.setEndValue(0)
+            self.animation10.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
+            self.animation10.finished.connect(self.on_animation_finished)
+            self.animation10.start()
 
+
+    def Anim_Slide_Frame_History_TE(self):
+        if self.animation_block:
+            return
+        self.animation_block = True
+        if self.ASF_History_TE == 0: #открытие окна
+            self.ASF_History_TE = 1
+            self.History_Sett_TE_Button.setText(" < ")
+            self.animation10 = QtCore.QPropertyAnimation(self.History_Sett_TE, b"minimumHeight")
+            self.animation10.setDuration(self.duration_anim_sideMenu)
+            self.animation10.setStartValue(0)
+            self.animation10.setEndValue(170)
+            self.animation10.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
+            self.animation10.finished.connect(self.on_animation_finished)
+            self.animation10.start()
+        else:                     #закрытие окна
+            self.ASF_History_TE = 0
+            self.History_Sett_TE_Button.setText(". . .")
+            self.animation10 = QtCore.QPropertyAnimation(self.History_Sett_TE, b"minimumHeight")
+            self.animation10.setDuration(self.duration_anim_sideMenu)
+            self.animation10.setStartValue(170)
+            self.animation10.setEndValue(0)
+            self.animation10.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
+            self.animation10.finished.connect(self.on_animation_finished)
+            self.animation10.start()
+
+    def Anim_Slide_Frame_Pers_TE(self):
+        if self.animation_block:
+            return
+        self.animation_block = True
+        if self.ASF_Pers_TE == 0: #открытие окна
+            self.ASF_Pers_TE = 1
+            self.Personality_Sett_TE_Button.setText(" < ")
+            self.animation9 = QtCore.QPropertyAnimation(self.Personality_Sett_TE, b"minimumHeight")
+            self.animation9.setDuration(self.duration_anim_sideMenu)
+            self.animation9.setStartValue(0)
+            self.animation9.setEndValue(170)
+            self.animation9.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
+            self.animation9.finished.connect(self.on_animation_finished)
+            self.animation9.start()
+        else:                     #закрытие окна
+            self.ASF_Pers_TE = 0
+            self.Personality_Sett_TE_Button.setText(". . .")
+            self.animation9 = QtCore.QPropertyAnimation(self.Personality_Sett_TE, b"minimumHeight")
+            self.animation9.setDuration(self.duration_anim_sideMenu)
+            self.animation9.setStartValue(170)
+            self.animation9.setEndValue(0)
+            self.animation9.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
+            self.animation9.finished.connect(self.on_animation_finished)
+            self.animation9.start()
 
     def Slide_Frame_Options(self):
         if self.animation_block:
