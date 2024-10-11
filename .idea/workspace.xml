@@ -4,13 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="89b2c337-d58d-480d-ab3b-9a29d802b98c" name="Changes" comment="Added:&#10;- min/max interval ask to question in settings">
+    <list default="true" id="89b2c337-d58d-480d-ab3b-9a29d802b98c" name="Changes" comment="Added:&#10;- off bot-voice&#10;- new settings - Consol prompt (only visual)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/OpenAiApiKey.txt" beforeDir="false" afterPath="$PROJECT_DIR$/OpenAiApiKey.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/VoiceConvAsis_U_3I.ui" beforeDir="false" afterPath="$PROJECT_DIR$/VoiceConvAsis_U_3I.ui" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/icon/img_11728.png" beforeDir="false" afterPath="$PROJECT_DIR$/icon/img_11728.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/icon/img_11728_white.png" beforeDir="false" afterPath="$PROJECT_DIR$/icon/img_11728_white.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/menu_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/options.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/savefile.json" beforeDir="false" afterPath="$PROJECT_DIR$/savefile.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yandex_browser.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -282,7 +286,15 @@
       <option name="project" value="LOCAL" />
       <updated>1728324332649</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Added:&#10;- off bot-voice&#10;- new settings - Consol prompt (only visual)">
+      <option name="closed" value="true" />
+      <created>1728602924270</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1728602924270</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -296,8 +308,18 @@
     </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
+    <option name="OPEN_GENERIC_TABS">
+      <map>
+        <entry key="5a8874d6-3822-462a-82cd-56c95b4f0616" value="TOOL_WINDOW" />
+      </map>
+    </option>
     <option name="TAB_STATES">
       <map>
+        <entry key="5a8874d6-3822-462a-82cd-56c95b4f0616">
+          <value>
+            <State />
+          </value>
+        </entry>
         <entry key="MAIN">
           <value>
             <State>
@@ -330,6 +352,7 @@
     <MESSAGE value="Update OpenAiApiKey.txt" />
     <MESSAGE value="Added:&#10;-&quot;Number_of_tokens&quot;,&quot;Temperature&quot; save and settings blocks" />
     <MESSAGE value="Added:&#10;-icon folder" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added:&#10;-icon folder" />
+    <MESSAGE value="Added:&#10;- off bot-voice&#10;- new settings - Consol prompt (only visual)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added:&#10;- off bot-voice&#10;- new settings - Consol prompt (only visual)" />
   </component>
 </project>

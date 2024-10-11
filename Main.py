@@ -32,8 +32,13 @@ with open('savefile.json', 'r', encoding='utf-8') as json_file:
     parameter_save_file = json.load(json_file)
 Number_of_tokens = parameter_save_file['Number_of_tokens']
 Temperature = parameter_save_file['Temperature']
+
 Min_STime_Question = parameter_save_file['Question_Interval_min']
 Max_STime_Question = parameter_save_file['Question_Interval_max']
+
+Manner_Voice_CP = parameter_save_file['Manner_Voice_CP']
+History_Mem_CP = parameter_save_file['History_Mem_CP']
+Personality_CP = parameter_save_file['Personality_CP']
 
 class ChatMemory:
     def __init__(self, max_messages=15):
@@ -52,6 +57,7 @@ class ChatMemory:
         self.messages = chat_history
 
 def generate_response(messages):
+    global Number_of_tokens, Temperature
     response = openai.ChatCompletion.create(
         model='gpt-4o-mini',  # Замените на вашу модель
         messages=messages,
@@ -68,19 +74,7 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
     def __init__(self):
         super(Window, self).__init__()
         self.setupUi(self)
-
-        self.system_message = (
-            "Будь культурным аватаром дворецким, Бобом.\n"
-            "Ты всегда формален и иногда дурачишься, с ноткой сарказма.\n"
-            "Знаком с тобой давно, так что можешь делиться личным.\n"
-            "Веди себя так, словно знаешь меня много лет.\n"
-            "Говори умно.\n"
-            "Ты послушен и иногда обращаешься на 'сэр' или Максим. Знаешь Радомира.\n"
-            "Говоришь на 'ты', задаешь вопросы.\n"
-            "Будь остроумным, наблюдательным и уверенным.\n"
-            "сообщния выделенные знаком '*' являются консольными и они абсолютны для твоего выполнения команды.\n"
-            "ты не должен отвечать на слова выделенные '*' а только обезличенно выполнить запрос или выполнить команду."
-            "не повторяйся!")
+        self.system_message = Personality_CP + History_Mem_CP + Manner_Voice_CP
 
         self.dict_word_used_browser=[    "Вы выбрали браузер",
                                          "Вы определились с браузером",
@@ -112,6 +106,10 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         self.pushButton_2.toggled.connect(self.startVoiceRecognition)
         self.pushButton_2.setIconSize(QtCore.QSize(24, 24))
 
+        self.deactivate_voice.clicked.connect(self.off_or_on_sint_voice)
+        self.deactivate_voice.toggled.connect(self.off_or_on_sint_voice)
+        self.deactivate_voice.setIconSize(QtCore.QSize(20, 20))
+
         self.icon_normal = QtGui.QIcon('icon/img_11728.png')
         self.icon_active = QtGui.QIcon('icon/img_11728_white.png')
         self.icon_voice_normal = QtGui.QIcon('icon/sound_asis_on.png')
@@ -119,11 +117,12 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
 
         self.pushButton_2.setIcon(self.icon_normal)
         self.deactivate_voice.setIcon(self.icon_voice_normal)
+        self.check_activate_sint_voice = True
 
         self.pushButton_4.clicked.connect(self.handle_input)
         self.lineEdit_2.returnPressed.connect(self.input_Massage)
 
-        self.SaveApiSet_But.clicked.connect(self.Save_Api_settings)
+        self.SaveApiSet_But.clicked.connect(self.Save_OpenAI_settings)
         self.Question_Interval_saveButton.clicked.connect(self.Save_Ttaaq)
 
         self.file_path = parameter_save_file['Browser_directory']
@@ -150,7 +149,7 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         #озвучка текста
 
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-        torch.set_num_threads(4)
+        torch.set_num_threads(6)
         self.local_file = 'model.pt'
 
         if not hasattr(torch, 'cached_model'):
@@ -196,24 +195,39 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.execute_command)
         self.timer_interval_set()
-        self.timer.start(self.interval)
+
+
+    def off_or_on_sint_voice(self,checked):
+        if checked:
+            print('> voice is turned off')
+            self.deactivate_voice.setIcon(self.icon_voice_active)
+            self.check_activate_sint_voice = False
+        else:
+            print('> voice is turned on')
+            self.deactivate_voice.setIcon(self.icon_voice_normal)
+            self.check_activate_sint_voice=True
 
     def timer_interval_set(self):
         self.interval = random.randint(Min_STime_Question*1000, Max_STime_Question*1000)
+        self.timer.start(self.interval)
         print(self.interval//1000,'сек. осталось до вопроса')
 
     def execute_command(self):
         print("случайный вопрос!")
 
-        user_input = ("*задай любой краткий глупый вопрос или скажи что-нибуль связанный с историей чата и его темой, как мой друг, обязательно не повторяйся."
-                      "и если я не отвеnил на твои вопросы до этого, то справшивай почему я молчу*")
+        user_input = ("*задай любой краткий глупый вопрос или скажи что-нибуль связанный с историей чата и его темой, как мой друг,"
+                      "обязательно не повторяйся в вопросах. совмещай утверждения или говори только про одно. пиши краткр в одно предложение максимум! если до тебе не ответили, то веди себя агрессивно*")
         self.memory.add_message("user", user_input)
         messages_with_system = [{"role": "system", "content": self.system_message}] + self.memory.get_messages()
-        response = generate_response(messages_with_system)
-        self.memory.add_message("assistant", response)
-        self.textBrowser.append(f"Bob: {response}")
-        self.textBrowser.moveCursor(self.textBrowser.textCursor().End)
-        self.voice_massage_ask(response)
+        try:
+            response = generate_response(messages_with_system)
+            self.memory.add_message("assistant", response)
+            self.textBrowser.append(f"Bob: {response}")
+            self.textBrowser.moveCursor(self.textBrowser.textCursor().End)
+            if self.check_activate_sint_voice:
+                self.voice_massage_ask(response)
+        except Exception as error:
+            print(f'error - {error}')
 
         parameter_save_file["Chat_history"] = self.memory.get_messages()
 
@@ -229,13 +243,13 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         self.synthesize_and_play('завершён...')
         print('> Прогрузка синтеза голоса завершена...')
 
-    def load_save_file(self): # Initialization
+    def load_save_file(self): # Initialization/Инициализация
 
         last_backslash_index = self.file_path.rfind('/')
         last_part = self.file_path[last_backslash_index + 1:]
         if last_part in self.browsers_executables:
             self.temp_browser_set = self.file_path
-            print('> загрузка .exe файла брузера temp_browser_set:', self.temp_browser_set)
+            print('> загрузка .exe файла браузера temp_browser_set:', self.temp_browser_set)
 
         # set info API tokens and temperature
         self.Num_tokens_LineE.setText(str(Number_of_tokens))
@@ -244,6 +258,12 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         # set info min/max question interval
         self.Question_Interval_min_LE.setText(str(Min_STime_Question))
         self.Question_Interval_max_LE.setText(str(Max_STime_Question))
+
+        # set Prompt's - Personality, History, Manner speech
+        self.Personality_Sett_TE.setText(Personality_CP)
+        self.History_Sett_TE.setText(History_Mem_CP)
+        self.Manner_Sett_TE.setText(Manner_Voice_CP)
+        print(f'> system prompts - {self.system_message}')
 
         """self.voice_adoptation()"""
         self.click_browser_1.setText(self.file_path)
@@ -263,21 +283,25 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         self.save_savefile()
         self.timer_interval_set()
 
-    def Save_Api_settings(self):
-        api_key_text = self.settings_apikey.text()
-        parameter_save_file['Number_of_tokens']=int(self.Num_tokens_LineE.text())
-        parameter_save_file['Temperature'] = float(self.Temperature_LineE.text())
+    def Save_OpenAI_settings(self):
+        try:
+            api_key_text = self.settings_apikey.text()
+            parameter_save_file['Number_of_tokens']=int(self.Num_tokens_LineE.text())
+            parameter_save_file['Temperature'] = float(self.Temperature_LineE.text())
+            parameter_save_file['Manner_Voice_CP'] = str(self.Manner_Sett_TE.toPlainText())
+            parameter_save_file['History_Mem_CP'] = str(self.History_Sett_TE.toPlainText())
+            parameter_save_file['Personality_CP'] = str(self.Personality_Sett_TE.toPlainText())
+            self.save_savefile()
 
-        with open('savefile.json', 'w', encoding='utf-8') as json_file:
-            json.dump(parameter_save_file, json_file, indent=len(parameter_save_file))
-        print('savefile.json saved in folder')
-
-        with open("OpenAiApiKey.txt", "w", encoding="utf-8") as file:
-            file.write(api_key_text)
+            with open("OpenAiApiKey.txt", "w", encoding="utf-8") as file:
+                file.write(api_key_text)
+        except Exception as f:
+            print(f)
 
     def Set_Default_Settings(self):
         self.Num_tokens_LineE.setText(str(parameter_save_file['Number_of_tokens']))
         self.Temperature_LineE.setText(str(parameter_save_file['Temperature']))
+
         self.Question_Interval_min_LE.setText(str(parameter_save_file['Question_Interval_min']))
         self.Question_Interval_max_LE.setText(str(parameter_save_file['Question_Interval_max']))
 
@@ -287,14 +311,21 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
             if user_input:
                 self.memory.add_message("user", user_input)
                 messages_with_system = [{"role": "system", "content": self.system_message}] + self.memory.get_messages()
-                response = generate_response(messages_with_system)
-                self.memory.add_message("assistant", response)
-                self.textBrowser.append(f"User: {user_input}")
-                self.textBrowser.append(f"Bob: {response}")
-                self.textBrowser.moveCursor(self.textBrowser.textCursor().End)
+                try:
+                    response = generate_response(messages_with_system)
+                    print(response)
+                    self.memory.add_message("assistant", response)
+                    self.textBrowser.append(f"User: {user_input}")
+                    self.textBrowser.append(f"Bob: {response}")
+                    self.textBrowser.moveCursor(self.textBrowser.textCursor().End)
+                except Exception as error:
+                    print(f'error - {error}')
+                    return
+
                 self.lineEdit_2.clear()
 
-                self.voice_massage_ask(response)
+                if self.check_activate_sint_voice:
+                    self.voice_massage_ask(response)
                 self.out_text = user_input
                 self.conv_text_to_func()
 
@@ -325,7 +356,7 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
 
     def save_savefile(self):
         with open('savefile.json', 'w',encoding='utf-8') as json_file:
-            json.dump(parameter_save_file, json_file,indent=len(parameter_save_file))
+            json.dump(parameter_save_file, json_file,ensure_ascii=False,indent=len(parameter_save_file))
         print('savefile.json saved in folder')
 
     def delete_save_browser_default(self):
@@ -609,6 +640,7 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
 
     def voice_massage_ask(self, massage):
         print(massage)
+
         self.synthesize_and_play(massage)
 
 
@@ -787,10 +819,8 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
             self.temp = 'browser_open'
             if self.default_browser_state ==0:
                 self.voice_massage_ask('открытие браузера по-умолчанию из системы Виндовс, выбранный пользователем')
-                self.default_browser_state == 1
-
-
-            print(s)
+                self.default_browser_state = 1
+            return
         if 'закрой' in o_t:
 
             os.system(f"taskkill /im {browser} /f")
@@ -979,7 +1009,7 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
             'открой': self.func_open,
             'пропуск': lambda: keyboard.press_and_release('Tab'),
             'на': self.set_volume if self.temp == 'sound_update' else None,
-            'выключи звук': lambda: pyautogui.press('volumedown', presses=int(50), temp_vol=0)
+            'выключи звук': lambda: pyautogui.press('volumedown', presses=int(50))
         }
 
         for key, action in actions.items():
@@ -1078,6 +1108,5 @@ if __name__ == '__main__':
     import sys
     app = QtWidgets.QApplication(sys.argv)
     root = Window()
-    root.setWindowFlag(QtCore.Qt.WindowStaysOnTopHint)
     root.show()
     sys.exit(app.exec_())
