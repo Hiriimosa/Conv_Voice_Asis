@@ -149,7 +149,7 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         #озвучка текста
 
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-        torch.set_num_threads(6)
+        torch.set_num_threads(8)
         self.local_file = 'model.pt'
 
         if not hasattr(torch, 'cached_model'):
@@ -195,6 +195,7 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.execute_command)
         self.timer_interval_set()
+        self.timer.start(self.interval)
 
 
     def off_or_on_sint_voice(self,checked):
@@ -209,7 +210,6 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
 
     def timer_interval_set(self):
         self.interval = random.randint(Min_STime_Question*1000, Max_STime_Question*1000)
-        self.timer.start(self.interval)
         print(self.interval//1000,'сек. осталось до вопроса')
 
     def execute_command(self):
@@ -282,6 +282,7 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         Max_STime_Question = int(self.Question_Interval_max_LE.text())
         self.save_savefile()
         self.timer_interval_set()
+        self.timer.start(self.interval)
 
     def Save_OpenAI_settings(self):
         try:
@@ -644,7 +645,7 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         self.synthesize_and_play(massage)
 
 
-    def synthesize_and_play(self,text, speaker='baya', sample_rate=24000):
+    def synthesize_and_play(self,text, speaker='baya', sample_rate=48000):
 
         text = text+'....ъъъъ'
         audio_path = self.model.save_wav(text=text, speaker=speaker, sample_rate=sample_rate)
@@ -654,6 +655,7 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         sd.play(audio, samplerate=sr)
         sd.wait()
         self.timer_interval_set()
+        self.timer.start(self.interval)
 
 
     def set_volume(self):
