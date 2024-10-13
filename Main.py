@@ -5,6 +5,8 @@ import subprocess
 import threading
 import time
 import webbrowser
+from http.client import responses
+
 import pyautogui
 import pyaudio
 import keyboard
@@ -13,6 +15,7 @@ import openai
 import json
 import soundfile as sf
 import sounddevice as sd
+from torchgen.packaged.autograd.gen_autograd import gen_autograd
 from vosk import Model, KaldiRecognizer
 from PyQt5 import QtWidgets, QtCore, uic,QtGui
 from PyQt5.QtWidgets import (QFileDialog)
@@ -145,6 +148,7 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         self.default_browser_state = 0
         self.out_text = ""
         self.model=None
+        self.history_edit_check = 0
 
         #озвучка текста
 
@@ -208,6 +212,26 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
             self.deactivate_voice.setIcon(self.icon_voice_normal)
             self.check_activate_sint_voice=True
 
+    def fifteens_times_history_gen(self):
+        global History_Mem_CP
+        chat_history = self.memory.get_messages()
+        chat_string = "\n".join(f"{entry['role']}: {entry['content']}" for entry in chat_history)
+        text = ('выдели информацию из всего текста (в частности у пользователя) такую что может пригодиться на долгое время, что можно вcпомнить на будущее.'
+                'и то что попросил пользователь у ассистента. сделать все очень кратко по возможности в одного предложения. пиши словно идет обращение к ассистенту. при отсутствии важной инфорvации вывести пустоту.'
+                'нужен только текст о том какой ассистент должен быть с тем, что должен помнить')
+        sys_message  =f"'{chat_string}' - {text}"
+        messages_with_system = [{"role": "system", "content": sys_message}]
+        response = generate_response(messages_with_system)
+        print(">>>",response, "<<<")
+        messages_with_system = [{"role": "system", "content": (f"'{response}' - добавь текст из первого текста в этот '{History_Mem_CP}' адаптируя первый текст под стиль написании второго, но не меняя второй текст просто добавь из первого. пиши словно идет обращение к ассистенту. текст должен быть написано к ассистенту."
+                                                               f"должно быть все написано обезличено без упоминания пользвателя и ассистента. выведи только в один текст.")}]
+        response = generate_response(messages_with_system)
+        print("<<<",response,">>>" )
+        History_Mem_CP = response
+        parameter_save_file['History_Mem_CP'] = History_Mem_CP
+        self.History_Sett_TE.setText()
+        self.Save_OpenAI_settings()
+
     def timer_interval_set(self):
         self.interval = random.randint(Min_STime_Question*1000, Max_STime_Question*1000)
         print(self.interval//1000,'сек. осталось до вопроса')
@@ -215,7 +239,7 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
     def execute_command(self):
         print("случайный вопрос!")
 
-        user_input = ("*задай любой краткий глупый вопрос или скажи что-нибуль утвердительнон НО не вопрос связанный с историей чата и его темой, как мой друг,"
+        user_input = ("*задай краткий любой глупый вопрос или скажи что-нибуль утвердительнон НО не вопрос. связанный с историей чата и его темой, как мой друг,"
                       "обязательно не повторяйся в вопросах. совмещай утверждения или говори только про одно. пиши краткр в одно предложение максимум! если до тебе не ответили, то веди себя агрессивно и молчи в ответ*")
         self.memory.add_message("user", user_input)
         messages_with_system = [{"role": "system", "content": self.system_message}] + self.memory.get_messages()
@@ -224,6 +248,12 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
             self.memory.add_message("assistant", response)
             self.textBrowser.append(f"Bob: {response}")
             self.textBrowser.moveCursor(self.textBrowser.textCursor().End)
+            self.history_edit_check +=1
+            if self.history_edit_check >= 3:
+                print(self.history_edit_check)
+                self.fifteens_times_history_gen()
+                self.history_edit_check = 0
+            print(response)
             if self.check_activate_sint_voice:
                 self.voice_massage_ask(response)
         except Exception as error:
@@ -285,13 +315,17 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         self.timer.start(self.interval)
 
     def Save_OpenAI_settings(self):
+        global Manner_Voice_CP,History_Mem_CP,Personality_CP
         try:
             api_key_text = self.settings_apikey.text()
+            Manner_Voice_CP = str(self.Manner_Sett_TE.toPlainText())
+            History_Mem_CP = str(self.History_Sett_TE.toPlainText())
+            Personality_CP = str(self.Personality_Sett_TE.toPlainText())
             parameter_save_file['Number_of_tokens']=int(self.Num_tokens_LineE.text())
             parameter_save_file['Temperature'] = float(self.Temperature_LineE.text())
-            parameter_save_file['Manner_Voice_CP'] = str(self.Manner_Sett_TE.toPlainText())
-            parameter_save_file['History_Mem_CP'] = str(self.History_Sett_TE.toPlainText())
-            parameter_save_file['Personality_CP'] = str(self.Personality_Sett_TE.toPlainText())
+            parameter_save_file['Manner_Voice_CP'] = Manner_Voice_CP
+            parameter_save_file['History_Mem_CP'] = History_Mem_CP
+            parameter_save_file['Personality_CP'] = Personality_CP
             self.save_savefile()
 
             with open("OpenAiApiKey.txt", "w", encoding="utf-8") as file:
@@ -318,6 +352,13 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
                     self.memory.add_message("assistant", response)
                     self.textBrowser.append(f"User: {user_input}")
                     self.textBrowser.append(f"Bob: {response}")
+
+                    self.history_edit_check += 1
+                    if self.history_edit_check >= 15:
+                        print(self.history_edit_check)
+                        self.fifteens_times_history_gen()
+                        self.history_edit_check = 0
+
                     self.textBrowser.moveCursor(self.textBrowser.textCursor().End)
                 except Exception as error:
                     print(f'error - {error}')
@@ -788,7 +829,7 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
                     self.number_range = 4
                 self.voice_massage_ask(('открытие сайта', site))
 
-            elif word in conv_num_file: #открытие проводника
+            elif word in conv_num_file: # открытие проводника
                 self.voice_massage_ask('открытие проводника')
 
                 path_folder = conv_num_file[word]
