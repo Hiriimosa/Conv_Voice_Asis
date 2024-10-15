@@ -24,8 +24,8 @@
   </property>
   <property name="maximumSize">
    <size>
-    <width>640</width>
-    <height>480</height>
+    <width>800</width>
+    <height>640</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -90,14 +90,14 @@ background-color: rgb(40,40,40);
          </property>
          <property name="minimumSize">
           <size>
-           <width>639</width>
-           <height>479</height>
+           <width>640</width>
+           <height>480</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>639</width>
-           <height>479</height>
+           <width>800</width>
+           <height>640</height>
           </size>
          </property>
          <property name="frameShape">
@@ -132,14 +132,14 @@ background-color: rgb(40,40,40);
             </property>
             <property name="minimumSize">
              <size>
-              <width>55</width>
+              <width>80</width>
               <height>480</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
               <width>0</width>
-              <height>480</height>
+              <height>640</height>
              </size>
             </property>
             <property name="styleSheet">
@@ -191,10 +191,10 @@ border-radius: 15px;
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_3">
                 <property name="leftMargin">
-                 <number>5</number>
+                 <number>0</number>
                 </property>
                 <property name="topMargin">
-                 <number>0</number>
+                 <number>16</number>
                 </property>
                 <property name="rightMargin">
                  <number>0</number>
@@ -202,7 +202,7 @@ border-radius: 15px;
                 <property name="bottomMargin">
                  <number>380</number>
                 </property>
-                <item alignment="Qt::AlignLeft">
+                <item alignment="Qt::AlignLeft|Qt::AlignTop">
                  <widget class="QFrame" name="frame_7">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -224,7 +224,7 @@ border-radius: 15px;
                   </property>
                   <layout class="QGridLayout" name="gridLayout_2">
                    <property name="leftMargin">
-                    <number>0</number>
+                    <number>16</number>
                    </property>
                    <property name="topMargin">
                     <number>0</number>
@@ -235,8 +235,11 @@ border-radius: 15px;
                    <property name="bottomMargin">
                     <number>0</number>
                    </property>
-                   <property name="spacing">
-                    <number>5</number>
+                   <property name="horizontalSpacing">
+                    <number>16</number>
+                   </property>
+                   <property name="verticalSpacing">
+                    <number>10</number>
                    </property>
                    <item row="0" column="0" alignment="Qt::AlignHCenter">
                     <widget class="QToolButton" name="toolButton_3">
@@ -253,8 +256,8 @@ border_radius: 5px;</string>
                      </property>
                      <property name="iconSize">
                       <size>
-                       <width>22</width>
-                       <height>22</height>
+                       <width>28</width>
+                       <height>28</height>
                       </size>
                      </property>
                     </widget>
@@ -270,14 +273,20 @@ border_radius: 5px;</string>
                      </property>
                      <property name="iconSize">
                       <size>
-                       <width>24</width>
-                       <height>24</height>
+                       <width>28</width>
+                       <height>28</height>
                       </size>
                      </property>
                     </widget>
                    </item>
                    <item row="0" column="1">
                     <widget class="QLabel" name="label">
+                     <property name="font">
+                      <font>
+                       <weight>75</weight>
+                       <bold>true</bold>
+                      </font>
+                     </property>
                      <property name="styleSheet">
                       <string notr="true">color: white;</string>
                      </property>
@@ -288,6 +297,12 @@ border_radius: 5px;</string>
                    </item>
                    <item row="1" column="1">
                     <widget class="QLabel" name="label_2">
+                     <property name="font">
+                      <font>
+                       <weight>75</weight>
+                       <bold>true</bold>
+                      </font>
+                     </property>
                      <property name="styleSheet">
                       <string notr="true">color: white;</string>
                      </property>
@@ -305,25 +320,28 @@ border_radius: 5px;</string>
             </layout>
            </widget>
           </item>
-          <item alignment="Qt::AlignHCenter">
+          <item>
            <widget class="QFrame" name="frame_6">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Maximum">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
             <property name="minimumSize">
              <size>
-              <width>585</width>
+              <width>480</width>
               <height>480</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>0</width>
-              <height>480</height>
+              <width>720</width>
+              <height>640</height>
              </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"/>
             </property>
             <property name="frameShape">
              <enum>QFrame::NoFrame</enum>
@@ -353,21 +371,21 @@ border_radius: 5px;</string>
              <item>
               <widget class="QFrame" name="Consol">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
                <property name="minimumSize">
                 <size>
-                 <width>585</width>
+                 <width>480</width>
                  <height>480</height>
                 </size>
                </property>
                <property name="maximumSize">
                 <size>
-                 <width>0</width>
-                 <height>480</height>
+                 <width>720</width>
+                 <height>640</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -403,10 +421,16 @@ border_radius: 5px;</string>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>480</width>
+                    <height>0</height>
+                   </size>
+                  </property>
                   <property name="maximumSize">
                    <size>
-                    <width>16777215</width>
-                    <height>601</height>
+                    <width>720</width>
+                    <height>600</height>
                    </size>
                   </property>
                   <property name="styleSheet">
@@ -475,20 +499,20 @@ writing-mode: vertical-lr;</string>
                 <item>
                  <widget class="QFrame" name="Buttons">
                   <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                   <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
                   <property name="minimumSize">
                    <size>
-                    <width>0</width>
+                    <width>100</width>
                     <height>70</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>601</width>
+                    <width>720</width>
                     <height>70</height>
                    </size>
                   </property>
@@ -525,9 +549,15 @@ writing-mode: vertical-lr;</string>
                        <verstretch>0</verstretch>
                       </sizepolicy>
                      </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>300</width>
+                       <height>0</height>
+                      </size>
+                     </property>
                      <property name="maximumSize">
                       <size>
-                       <width>577</width>
+                       <width>710</width>
                        <height>70</height>
                       </size>
                      </property>
@@ -559,6 +589,12 @@ border-radius: 20px;</string>
                       </property>
                       <item>
                        <widget class="QLineEdit" name="lineEdit_2">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
                         <property name="font">
                          <font>
                           <family>System</family>
@@ -950,10 +986,10 @@ background-color: rgb(10,10,10);
                </layout>
               </widget>
              </item>
-             <item alignment="Qt::AlignRight">
+             <item>
               <widget class="QFrame" name="frame_4">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -1035,9 +1071,9 @@ border:5px;</string>
                    <property name="geometry">
                     <rect>
                      <x>0</x>
-                     <y>-65</y>
-                     <width>530</width>
-                     <height>694</height>
+                     <y>0</y>
+                     <width>418</width>
+                     <height>706</height>
                     </rect>
                    </property>
                    <property name="styleSheet">
@@ -1275,7 +1311,7 @@ border-radius:15px;</string>
                                </property>
                                <property name="icon">
                                 <iconset>
-                                 <normaloff>C:/Users/tegip/.designer/backup/cross.png</normaloff>C:/Users/tegip/.designer/backup/cross.png</iconset>
+                                 <normaloff>../../../tegip/.designer/backup/cross.png</normaloff>../../../tegip/.designer/backup/cross.png</iconset>
                                </property>
                               </widget>
                              </item>
@@ -1327,7 +1363,7 @@ border-radius:15px;</string>
                     <item alignment="Qt::AlignTop">
                      <widget class="QFrame" name="settings_apikey_frame">
                       <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                       <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                        </sizepolicy>
@@ -1340,7 +1376,7 @@ border-radius:15px;</string>
                       </property>
                       <property name="maximumSize">
                        <size>
-                        <width>575</width>
+                        <width>720</width>
                         <height>16777215</height>
                        </size>
                       </property>
@@ -1538,7 +1574,7 @@ border-radius:15px</string>
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>203</width>
+                           <width>100</width>
                            <height>35</height>
                           </size>
                          </property>

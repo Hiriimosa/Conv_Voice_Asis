@@ -5,11 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="89b2c337-d58d-480d-ab3b-9a29d802b98c" name="Changes" comment="Added:&#10;- small edited">
+      <change beforePath="$PROJECT_DIR$/.idea/VoiceConv.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/VoiceConv.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/OpenAiApiKey.txt" beforeDir="false" afterPath="$PROJECT_DIR$/OpenAiApiKey.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VoiceConvAsis_U_3I.ui" beforeDir="false" afterPath="$PROJECT_DIR$/VoiceConvAsis_U_3I.ui" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/savefile.json" beforeDir="false" afterPath="$PROJECT_DIR$/savefile.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,8 +39,8 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/HaerBit/Conv_Voice_Asis.git&quot;,
-    &quot;accountId&quot;: &quot;9820d28d-d080-4b68-a4a3-4cc7eda68777&quot;
+    &quot;url&quot;: &quot;https://github.com/Hiriimosa/Conv_Voice_Asis.git&quot;,
+    &quot;accountId&quot;: &quot;b38a45ac-5670-4799-8e23-e1a71011cdf5&quot;
   }
 }</component>
   <component name="ProblemsViewState">
@@ -54,21 +56,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.Main (1).executor": "Run",
-    "Python.Main.executor": "Run",
-    "Python.crypto.executor": "Run",
-    "Python.cryptography.executor": "Run",
-    "Python.test.executor": "Run",
-    "Python.еtes.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "D:/Works/VoiceConvAsis",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.Main (1).executor&quot;: &quot;Run&quot;,
+    &quot;Python.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.crypto.executor&quot;: &quot;Run&quot;,
+    &quot;Python.cryptography.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;Python.еtes.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Works/VoiceConvAsis&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;advanced.settings&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\Works\VoiceConvAsis" />
@@ -175,7 +177,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-98f27166c754-ba05f1cad1b1-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-242.21829.153" />
+        <option value="bundled-python-sdk-0e3be3396995-c546a90a8094-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-242.23339.19" />
       </set>
     </attachedChunks>
   </component>

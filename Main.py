@@ -5,8 +5,6 @@ import subprocess
 import threading
 import time
 import webbrowser
-from http.client import responses
-
 import pyautogui
 import pyaudio
 import keyboard
@@ -15,7 +13,6 @@ import openai
 import json
 import soundfile as sf
 import sounddevice as sd
-from torchgen.packaged.autograd.gen_autograd import gen_autograd
 from vosk import Model, KaldiRecognizer
 from PyQt5 import QtWidgets, QtCore, uic,QtGui
 from PyQt5.QtWidgets import (QFileDialog)
@@ -183,8 +180,9 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         self.ASF_History_TE = 0
         self.ASF_Manner_TE = 0
 
-        self.frame_6_max_width = 585
-        self.frame_6_main_width = 525
+        self.frame_6_max_width = 720
+        self.frame_6_min_width = 480
+        self.frame_6_main_width = 720
         self.animation_block = 0
         self.duration_anim_sideMenu = 250
 
@@ -532,73 +530,69 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
 
         if self.Side_Menu_Num == 0:
             self.Side_Menu_Num = 1
-            if self.Side_Menu_Num_2 == 0:
-                self.animation2 = QtCore.QPropertyAnimation(self.Consol, b"minimumWidth")
-                self.animation2.setDuration(self.duration_anim_sideMenu)
-                self.animation2.setEndValue(0)
-                self.animation2.setStartValue(self.frame_6_max_width)
-                self.animation2.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
-                self.animation2.finished.connect(self.on_animation_finished)
-                self.animation2.start()
+            self.animation2 = QtCore.QPropertyAnimation(self.Consol, b"minimumWidth")
+            self.animation2.setDuration(self.duration_anim_sideMenu)
+            self.animation2.setStartValue(self.frame_6_min_width)
+            self.animation2.setEndValue(0)
+            self.animation2.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
+            self.animation2.finished.connect(self.on_animation_finished)
+            self.animation2.start()
+            self.animation22 = QtCore.QPropertyAnimation(self.Consol, b"maximumWidth")
+            self.animation22.setDuration(self.duration_anim_sideMenu)
+            self.animation22.setStartValue(self.frame_6_max_width)
+            self.animation22.setEndValue(0)
+            self.animation22.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
+            self.animation22.finished.connect(self.on_animation_finished)
+            self.animation22.start()
 
-                self.animation4 = QtCore.QPropertyAnimation(self.frame_4, b"minimumWidth")
-                self.animation4.setDuration(self.duration_anim_sideMenu)
-                self.animation4.setStartValue(0)
-                self.animation4.setEndValue(self.frame_6_max_width)
-                self.animation4.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
-                self.animation4.finished.connect(self.on_animation_finished)
-                self.animation4.start()
-            else:
-                self.animation2 = QtCore.QPropertyAnimation(self.Consol, b"minimumWidth")
-                self.animation2.setDuration(self.duration_anim_sideMenu)
-                self.animation2.setEndValue(0)
-                self.animation2.setStartValue(self.frame_6_main_width)
-                self.animation2.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
-                self.animation2.finished.connect(self.on_animation_finished)
-                self.animation2.start()
+            self.animation41 = QtCore.QPropertyAnimation(self.frame_4, b"minimumWidth")
+            self.animation41.setDuration(self.duration_anim_sideMenu)
+            self.animation41.setStartValue(0)
+            self.animation41.setEndValue(self.frame_6_min_width)
+            self.animation41.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
+            self.animation41.finished.connect(self.on_animation_finished)
+            self.animation41.start()
+            self.animation42 = QtCore.QPropertyAnimation(self.frame_4, b"maximumWidth")
+            self.animation42.setDuration(self.duration_anim_sideMenu)
+            self.animation42.setStartValue(0)
+            self.animation42.setEndValue(self.frame_6_max_width)
+            self.animation42.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
+            self.animation42.finished.connect(self.on_animation_finished)
+            self.animation42.start()
 
-                self.animation4 = QtCore.QPropertyAnimation(self.frame_4, b"minimumWidth")
-                self.animation4.setDuration(self.duration_anim_sideMenu)
-                self.animation4.setStartValue(0)
-                self.animation4.setEndValue(self.frame_6_main_width)
-                self.animation4.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
-                self.animation4.finished.connect(self.on_animation_finished)
-                self.animation4.start()
             self.Set_Default_Settings()
         else:
             self.Side_Menu_Num = 0
-            if self.Side_Menu_Num_2 == 0:
-                self.animation2 = QtCore.QPropertyAnimation(self.frame_4, b"minimumWidth")
-                self.animation2.setDuration(self.duration_anim_sideMenu)
-                self.animation2.setStartValue(self.frame_6_max_width)
-                self.animation2.setEndValue(0)
-                self.animation2.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
-                self.animation2.finished.connect(self.on_animation_finished)
-                self.animation2.start()
+            self.animation2 = QtCore.QPropertyAnimation(self.frame_4, b"maximumWidth")
+            self.animation2.setDuration(self.duration_anim_sideMenu)
+            self.animation2.setStartValue(self.frame_6_max_width)
+            self.animation2.setEndValue(0)
+            self.animation2.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
+            self.animation2.finished.connect(self.on_animation_finished)
+            self.animation2.start()
+            self.animation21 = QtCore.QPropertyAnimation(self.frame_4, b"minimumWidth")
+            self.animation21.setDuration(self.duration_anim_sideMenu)
+            self.animation21.setStartValue(self.frame_6_min_width)
+            self.animation21.setEndValue(0)
+            self.animation21.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
+            self.animation21.finished.connect(self.on_animation_finished)
+            self.animation21.start()
 
-                self.animation4 = QtCore.QPropertyAnimation(self.Consol, b"minimumWidth")
-                self.animation4.setDuration(self.duration_anim_sideMenu)
-                self.animation4.setStartValue(0)
-                self.animation4.setEndValue(self.frame_6_max_width)
-                self.animation4.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
-                self.animation4.finished.connect(self.on_animation_finished)
-                self.animation4.start()
-            else:
-                self.animation2 = QtCore.QPropertyAnimation(self.frame_4, b"minimumWidth")
-                self.animation2.setDuration(self.duration_anim_sideMenu)
-                self.animation2.setStartValue(self.frame_6_main_width)
-                self.animation2.setEndValue(0)
-                self.animation2.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
-                self.animation2.finished.connect(self.on_animation_finished)
-                self.animation2.start()
+            self.animation4 = QtCore.QPropertyAnimation(self.Consol, b"minimumWidth")
+            self.animation4.setDuration(self.duration_anim_sideMenu)
+            self.animation4.setStartValue(0)
+            self.animation4.setEndValue(self.frame_6_min_width)
+            self.animation4.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
+            self.animation4.finished.connect(self.on_animation_finished)
+            self.animation4.start()
+            self.animation41 = QtCore.QPropertyAnimation(self.Consol, b"maximumWidth")
+            self.animation41.setDuration(self.duration_anim_sideMenu)
+            self.animation41.setStartValue(0)
+            self.animation41.setEndValue(self.frame_6_max_width)
+            self.animation41.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
+            self.animation41.finished.connect(self.on_animation_finished)
+            self.animation41.start()
 
-                self.animation4 = QtCore.QPropertyAnimation(self.Consol, b"minimumWidth")
-                self.animation4.setDuration(self.duration_anim_sideMenu)
-                self.animation4.setStartValue(0)
-                self.animation4.setEndValue(self.frame_6_main_width)
-                self.animation4.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
-                self.animation4.finished.connect(self.on_animation_finished)
-                self.animation4.start()
 
 
     def Slide_Frame_Main(self):
@@ -609,71 +603,21 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         if self.Side_Menu_Num_2 == 0:
             self.animation2 = QtCore.QPropertyAnimation(self.Menu, b"minimumWidth")
             self.animation2.setDuration(self.duration_anim_sideMenu)
-            self.animation2.setStartValue(55)
-            self.animation2.setEndValue(115)
+            self.animation2.setStartValue(80)
+            self.animation2.setEndValue(160)
             self.animation2.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
             self.animation2.finished.connect(self.on_animation_finished)
             self.animation2.start()
-
-            self.animation3 = QtCore.QPropertyAnimation(self.frame_6, b"minimumWidth")
-            self.animation3.setDuration(self.duration_anim_sideMenu)
-            self.animation3.setStartValue(self.frame_6_max_width)
-            self.animation3.setEndValue(self.frame_6_main_width)
-            self.animation3.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
-            self.animation3.finished.connect(self.on_animation_finished)
-            self.animation3.start()
-
-            if self.Side_Menu_Num == 0:
-                self.animation1 = QtCore.QPropertyAnimation(self.Consol, b"minimumWidth")
-                self.animation1.setDuration(self.duration_anim_sideMenu)
-                self.animation1.setStartValue(self.frame_6_max_width)
-                self.animation1.setEndValue(self.frame_6_main_width)
-                self.animation1.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
-                self.animation1.finished.connect(self.on_animation_finished)
-                self.animation1.start()
-            else:
-                self.animation1 = QtCore.QPropertyAnimation(self.frame_4, b"minimumWidth")
-                self.animation1.setDuration(self.duration_anim_sideMenu)
-                self.animation1.setStartValue(self.frame_6_max_width)
-                self.animation1.setEndValue(self.frame_6_main_width)
-                self.animation1.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
-                self.animation1.finished.connect(self.on_animation_finished)
-                self.animation1.start()
 
             self.Side_Menu_Num_2 = 1
         else:
             self.animation2 = QtCore.QPropertyAnimation(self.Menu, b"minimumWidth")
             self.animation2.setDuration(self.duration_anim_sideMenu)
-            self.animation2.setStartValue(115)
-            self.animation2.setEndValue(55)
+            self.animation2.setStartValue(160)
+            self.animation2.setEndValue(80)
             self.animation2.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
             self.animation2.finished.connect(self.on_animation_finished)
             self.animation2.start()
-
-            self.animation3 = QtCore.QPropertyAnimation(self.frame_6, b"minimumWidth")
-            self.animation3.setDuration(self.duration_anim_sideMenu)
-            self.animation3.setStartValue(self.frame_6_main_width)
-            self.animation3.setEndValue(self.frame_6_max_width)
-            self.animation3.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
-            self.animation3.finished.connect(self.on_animation_finished)
-            self.animation3.start()
-
-            if self.Side_Menu_Num == 0:
-                self.animation1 = QtCore.QPropertyAnimation(self.Consol, b"minimumWidth")
-                self.animation1.setDuration(self.duration_anim_sideMenu)
-                self.animation1.setStartValue(self.frame_6_main_width)
-                self.animation1.setEndValue(self.frame_6_max_width)
-                self.animation1.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
-                self.animation1.finished.connect(self.on_animation_finished)
-                self.animation1.start()
-            else:
-                self.animation1 = QtCore.QPropertyAnimation(self.frame_4, b"minimumWidth")
-                self.animation1.setDuration(self.duration_anim_sideMenu)
-                self.animation1.setStartValue(self.frame_6_main_width)
-                self.animation1.setEndValue(self.frame_6_max_width)
-                self.animation1.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
-                self.animation1.finished.connect(self.on_animation_finished)
-                self.animation1.start()
 
             self.Side_Menu_Num_2 = 0
 
