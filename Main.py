@@ -40,6 +40,8 @@ Manner_Voice_CP = parameter_save_file['Manner_Voice_CP']
 History_Mem_CP = parameter_save_file['History_Mem_CP']
 Personality_CP = parameter_save_file['Personality_CP']
 
+Speaker_Voice = parameter_save_file['Speaker_Voice']
+
 class ChatMemory:
     def __init__(self, max_messages=15):
         self.max_messages = max_messages
@@ -147,6 +149,7 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         self.model=None
         self.history_edit_check = 0
 
+
         #озвучка текста
 
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -174,6 +177,13 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         self.History_Sett_TE_Button.clicked.connect(lambda : self.Anim_Slide_Frame_History_TE())
         self.Manner_Sett_TE_Button.clicked.connect(lambda: self.Anim_Slide_Frame_Manner_TE())
 
+        self.baya_tButton.clicked.connect(lambda: self.Change_Voice_Speaker('baya'))
+        self.kseniya_tButton.clicked.connect(lambda : self.Change_Voice_Speaker('kseniya'))
+        self.xenia_tButton.clicked.connect(lambda:self.Change_Voice_Speaker('xenia'))
+        self.aidar_tButton.clicked.connect(lambda:self.Change_Voice_Speaker('aidar'))
+        self.eugene_tButton.clicked.connect(lambda:self.Change_Voice_Speaker('eugene'))
+
+
         self.Side_Menu_Num = 0
         self.Side_Menu_Num_2 = 0
         self.ASF_Pers_TE = 0
@@ -199,6 +209,58 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         self.timer_interval_set()
         self.timer.start(self.interval)
 
+    def Change_Voice_Speaker(self,speaker):
+        global Speaker_Voice
+        Style_Sheet_act = ('QToolButton {'
+                           'background: rgb(20, 20, 20);'
+                           'color: white;'
+                           'border-radius: 15px;'
+                           'font-family:System;'
+                           'font-size:12px;}'
+
+                           'QToolButton :hover {'
+                           'background: rgb(20, 20, 20);'
+                           'color: white;'
+                           'border-radius: 15px;'
+                           'font-family:System;'
+                           'font-size:12px;}'
+
+                           'QToolButton :pressed {'
+                           'background: rgb(10, 10, 10);}')
+        Style_Sheet_norm = ('QToolButton {'
+                            'background: rgb(40, 40, 40);'
+                            'color: white;'
+                            'border-radius: 15px;'
+                            'font-family:System;'
+                            'font-size:12px;}'
+
+                            'QToolButton :hover {'
+                            'background: rgb(20, 20, 20);'
+                            'color: white;'
+                            'border-radius: 15px;'
+                            'font-family:System;'
+                            'font-size:12px;}'
+
+                            'QToolButton :pressed {'
+                            'background: rgb(10, 10, 10);}')
+
+        buttons = {
+            'baya': self.baya_tButton,
+            'kseniya': self.kseniya_tButton,
+            'xenia': self.xenia_tButton,
+            'eugene': self.eugene_tButton,
+            'aidar': self.aidar_tButton
+        }
+
+        for btn in buttons.values():
+            btn.setStyleSheet(Style_Sheet_norm)
+
+        if speaker in buttons:
+            buttons[speaker].setStyleSheet(Style_Sheet_act)
+
+        parameter_save_file['Speaker_Voice'] = speaker
+        Speaker_Voice= speaker
+        self.save_savefile()
 
     def off_or_on_sint_voice(self,checked):
         if checked:
@@ -292,6 +354,8 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         self.History_Sett_TE.setText(History_Mem_CP)
         self.Manner_Sett_TE.setText(Manner_Voice_CP)
         print(f'> system prompts - {self.system_message}')
+
+        self.Change_Voice_Speaker(Speaker_Voice)
 
         """self.voice_adoptation()"""
         self.click_browser_1.setText(self.file_path)
@@ -627,7 +691,7 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
     def voice_massage_ask(self, massage):
         print(massage)
 
-        self.synthesize_and_play(massage)
+        self.synthesize_and_play(massage,Speaker_Voice)
 
 
     def synthesize_and_play(self,text, speaker='baya', sample_rate=48000):
