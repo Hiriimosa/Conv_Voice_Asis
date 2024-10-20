@@ -929,7 +929,7 @@ color:white;
 </string>
                            </property>
                            <property name="text">
-                            <string>SUB</string>
+                            <string>...</string>
                            </property>
                           </widget>
                          </item>

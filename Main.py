@@ -23,6 +23,9 @@ from PyQt5.QtWidgets import QWidget
 from vosk import Model, KaldiRecognizer
 from PyQt5 import QtWidgets, QtCore, uic,QtGui
 from PyQt5.QtWidgets import (QFileDialog)
+
+from test import size_font
+
 # Загрузка UI файла
 Ui_Form, _ = uic.loadUiType('VoiceConvAsis_U_3I.ui')
 Ui_Form_sub, _ = uic.loadUiType('Threaded_sub_window.ui')
@@ -80,16 +83,27 @@ class Sub_Win(QMainWindow):
     def __init__(self, thread):
         super().__init__()
         try:
-            self.ui = uic.loadUi("Threaded_sub_window.ui", self)  # Загрузить ваш .ui файл
+            self.ui = uic.loadUi("Threaded_sub_window.ui", self)
             self.thread = thread
+            screen = QApplication.primaryScreen()
+            screen_size = screen.size()
 
             self.setWindowFlag(Qt.WindowStaysOnTopHint)
             self.setAttribute(Qt.WA_TranslucentBackground, True)
             self.setWindowFlags(Qt.FramelessWindowHint)
+            self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)
+            self.move(int(screen_size.width()/2-250),int(screen_size.height())-150)
+            self.screen_heights = {720:0, 1080:4, 1440:8, 2160:12, 2880:16, 4320:20}
+
+            self.label.setStyleSheet (''
+                                         'color:rgb(220, 220, 220);'
+                                         'background:rgba(40,40,40,0);'
+                                         'padding-left:10px;'
+                                         'font-family: "TimesNewRoman";'
+                                         f'font-size:{20+self.screen_heights[int(screen_size.height())]}px;'
+                                         '')
 
             self.thread.send_param.connect(self.update_label)
-            # Пример подключения сигнала кнопки, если такая кнопка существует
-            # self.ui.close_btn.clicked.connect(self.close_and_stop_thread)  # Убедитесь, что close_btn существует
         except Exception as e:
             print(f"Ошибка при инициализации Sub_Win: {e}")
 
@@ -102,7 +116,7 @@ class ThreadWindow(QThread):
 
     def __init__(self):
         super().__init__()
-        self.running = True  # Флаг для управления потоком
+        self.running = True
         self.message = ''
 
     def set_message(self, text):
@@ -110,13 +124,11 @@ class ThreadWindow(QThread):
 
     def run(self):
         self.send_param.emit(f"Сообщение {self.message}")  # Отправляем текст
-        self.sleep(1)  # Ждем 1 секунду
 
     def stop(self):
         self.running = False
 
 class Window(QtWidgets.QMainWindow, Ui_Form):
-    # Определение сигнала для передачи строки
     text_signal = QtCore.pyqtSignal(str)
     temp_vol = -1
     initialized_loadfile = False

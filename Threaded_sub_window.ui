@@ -59,16 +59,21 @@
     </property>
     <item>
      <widget class="QLabel" name="label">
+      <property name="font">
+       <font>
+        <family>TimesNewRoman</family>
+        <pointsize>-1</pointsize>
+       </font>
+      </property>
       <property name="styleSheet">
        <string notr="true">color:rgb(220, 220, 220);
 background:rgba(40,40,40,0);
 padding-left:10px;
-font-family: 'System';
-font-size:16px;</string>
+font-family: 'TimesNewRoman';
+font-size:72px;</string>
       </property>
       <property name="text">
-       <string>msjsdsnlkdvnkkkkkkkkkkkkkkkkkkkkkkkknnkldvnlksvdnlknav
-lh;a;nnjnkfsvdnjk;lfasvnjsdnjl;afadfnjkldal;da;njdfl;knjs</string>
+       <string>Sub</string>
       </property>
       <property name="textFormat">
        <enum>Qt::RichText</enum>
