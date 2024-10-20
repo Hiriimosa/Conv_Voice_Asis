@@ -13,11 +13,19 @@ import openai
 import json
 import soundfile as sf
 import sounddevice as sd
+from PyQt5 import QtWidgets, QtCore
+from PyQt5.QtCore import QThread,pyqtSignal
+from PyQt5.QtWidgets import QDialog, QPushButton, QVBoxLayout, QLabel
+from PyQt5 import QtWidgets, QtCore
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QMainWindow, QApplication, QDialog
+from PyQt5.QtWidgets import QWidget
 from vosk import Model, KaldiRecognizer
 from PyQt5 import QtWidgets, QtCore, uic,QtGui
 from PyQt5.QtWidgets import (QFileDialog)
 # Загрузка UI файла
 Ui_Form, _ = uic.loadUiType('VoiceConvAsis_U_3I.ui')
+Ui_Form_sub, _ = uic.loadUiType('Threaded_sub_window.ui')
 temp_vol = -1
 
 file_name = 'OpenAiApiKey.txt'
@@ -68,14 +76,55 @@ def generate_response(messages):
     )
     return response.choices[0].message['content'].strip()
 
+class Sub_Win(QMainWindow):
+    def __init__(self, thread):
+        super().__init__()
+        try:
+            self.ui = uic.loadUi("Threaded_sub_window.ui", self)  # Загрузить ваш .ui файл
+            self.thread = thread
+
+            self.setWindowFlag(Qt.WindowStaysOnTopHint)
+            self.setAttribute(Qt.WA_TranslucentBackground, True)
+            self.setWindowFlags(Qt.FramelessWindowHint)
+
+            self.thread.send_param.connect(self.update_label)
+            # Пример подключения сигнала кнопки, если такая кнопка существует
+            # self.ui.close_btn.clicked.connect(self.close_and_stop_thread)  # Убедитесь, что close_btn существует
+        except Exception as e:
+            print(f"Ошибка при инициализации Sub_Win: {e}")
+
+    def update_label(self, text):
+        self.label.setText(text)
+
+class ThreadWindow(QThread):
+    threadSignal = pyqtSignal(int)
+    send_param = pyqtSignal(str)
+
+    def __init__(self):
+        super().__init__()
+        self.running = True  # Флаг для управления потоком
+        self.message = ''
+
+    def set_message(self, text):
+        self.message = text
+
+    def run(self):
+        self.send_param.emit(f"Сообщение {self.message}")  # Отправляем текст
+        self.sleep(1)  # Ждем 1 секунду
+
+    def stop(self):
+        self.running = False
+
 class Window(QtWidgets.QMainWindow, Ui_Form):
     # Определение сигнала для передачи строки
     text_signal = QtCore.pyqtSignal(str)
     temp_vol = -1
     initialized_loadfile = False
+
     def __init__(self):
         super(Window, self).__init__()
         self.setupUi(self)
+        """self.setWindowFlag(Qt.FramelessWindowHint)"""
         self.system_message = Personality_CP + History_Mem_CP + Manner_Voice_CP
 
         self.dict_word_used_browser=[    "Вы выбрали браузер",
@@ -150,6 +199,7 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         self.history_edit_check = 0
 
 
+
         #озвучка текста
 
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -208,6 +258,37 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
         self.timer.timeout.connect(self.execute_command)
         self.timer_interval_set()
         self.timer.start(self.interval)
+
+        self.thread = None
+        self.Sub_Button.clicked.connect(self.on_btn)
+
+    def Send_Message_Sub(self,response):
+        response_1 = ''
+        response_2 = ''
+        for i in range(1, (len(response) // 50) + 1):
+            response_1 = response[:50 * i]
+            response_2 = response[50 * i + 1:]
+            response = response_1 + '\n' + response_2
+
+        if self.thread:
+            self.thread.send_param.emit(response)
+
+    def on_btn(self):
+        if self.thread is None:
+            self.thread = ThreadWindow()
+            self.thread.threadSignal.connect(self.on_threadSignal)
+            self.thread.start()
+
+            self.SubWin = Sub_Win(self.thread)
+            self.SubWin.show()
+        else:
+            self.thread.stop()
+            self.thread.quit()
+            self.thread.wait()
+            self.thread = None
+
+    def on_threadSignal(self, value):
+        print(f"Received from thread: {value}")
 
     def Change_Voice_Speaker(self,speaker):
         global Speaker_Voice
@@ -410,7 +491,6 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
                 messages_with_system = [{"role": "system", "content": self.system_message}] + self.memory.get_messages()
                 try:
                     response = generate_response(messages_with_system)
-                    print(response)
                     self.memory.add_message("assistant", response)
                     self.textBrowser.append(f"User: {user_input}")
                     self.textBrowser.append(f"Bob: {response}")
@@ -427,6 +507,8 @@ class Window(QtWidgets.QMainWindow, Ui_Form):
                     return
 
                 self.lineEdit_2.clear()
+
+                self.Send_Message_Sub(response)
 
                 if self.check_activate_sint_voice:
                     self.voice_massage_ask(response)
